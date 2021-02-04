@@ -26,6 +26,7 @@ jobs:
         working-directory: backend
         run: |
           npm i
+          pm2 restart Szakdoga
 
       - name: Testing Backend App
         working-directory: backend
@@ -33,8 +34,6 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
-        with:
-          token: 21ecc255-7fc3-4731-bde5-fc377b0725bc
 
       - name: Setup and Build Frontend App
         working-directory: frontend
