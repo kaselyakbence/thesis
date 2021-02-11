@@ -29,7 +29,7 @@ jobs:
         run: |
           npm i
           touch .env
-          echo DB_CONNECTION=$DB_CONNECTION >> .env
+          echo $DB_CONNECTION >> .env
           echo API_KEY=Test >> .env
           pm2 restart Thesis
 
