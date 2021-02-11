@@ -25,7 +25,7 @@ jobs:
       - name: Setup and Build Backend App
         working-directory: backend
         run: |
-          npm i -only=prod
+          npm i
           touch .env
           echo DB_CONNECTION=${{ secrets.DB_CONNECTION }} >> .env
           pm2 restart Thesis
