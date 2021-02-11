@@ -26,9 +26,6 @@ jobs:
         working-directory: backend
         run: |
           npm i
-          # : > .env
-          touch .env
-          echo DB_CONNECTION=${{ secrets.DB_CONNECTION }} >> .env
           pm2 restart Thesis
 
       - name: Testing Backend App
