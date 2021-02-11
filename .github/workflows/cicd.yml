@@ -24,10 +24,12 @@ jobs:
       
       - name: Setup and Build Backend App
         working-directory: backend
+        env:
+          DB_CONNECTION: ${{secrets.DB_CONNECTION}}
         run: |
           npm i
           touch .env
-          echo DB_CONNECTION=${{secrets.DB_CONNECTION}} >> .env
+          echo DB_CONNECTION=$DB_CONNECTION >> .env
           echo API_KEY=Test >> .env
           pm2 restart Thesis
 
