@@ -22,17 +22,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       
-      - name: Setup enviroments
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_DB_CONNECTION: ${{ secrets.SECRET_KEY }}
-          directory: backend
-          file_name: .env
-      
       - name: Setup and Build Backend App
         working-directory: backend
         run: |
           npm i
+          touch .env
+          echo DB_CONNECTION=${{ secrets.DB_CONNECTION }} >> .env
           pm2 restart Thesis
 
       - name: Testing Backend App
