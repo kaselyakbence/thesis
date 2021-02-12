@@ -1,4 +1,3 @@
-//Github action that runs tests and deploys the application to the development server
 name: CI/CD
 
 on:
