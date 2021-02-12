@@ -1,3 +1,4 @@
+//Github action that runs tests and deploys the application to the development server
 name: CI/CD
 
 on:
@@ -21,7 +22,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      
+
       - name: Setup and Build Backend App
         working-directory: backend
         env:
@@ -30,7 +31,7 @@ jobs:
           npm i
           touch .env
           echo $DB_CONNECTION >> .env
-          echo API_KEY=Test >> .env
+          echo APP_ENV=production >> .env
           pm2 restart Thesis
 
       - name: Testing Backend App
