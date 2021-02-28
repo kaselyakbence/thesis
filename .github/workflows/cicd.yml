@@ -28,6 +28,7 @@ jobs:
           DB_CONNECTION: ${{secrets.DB_CONNECTION}}
         run: |
           npm i
+          npm run build
           touch .env
           echo $DB_CONNECTION >> .env
           echo APP_ENV=production >> .env

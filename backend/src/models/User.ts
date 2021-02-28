@@ -1,6 +1,41 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const { toHash, compare } = require("../utils/password");
+import { Password } from "../utils/password";
+
+//Interface for User
+interface UserAttrs {
+  email: string;
+  nick_name: string;
+  first_name?: string;
+  last_name?: string;
+  birth_day?: Date;
+  password: string;
+  friends?: [mongoose.Types.ObjectId];
+  rooms?: [any];
+  dues?: [any];
+}
+
+//Interface for UserModel
+interface UserModel extends mongoose.Model<any> {
+  build(attrs: UserAttrs): UserDoc;
+  addFriend(id: string): UserModel;
+  getFriends(): UserModel;
+}
+
+//Interface for the properties of User Document
+interface UserDoc extends mongoose.Document {
+  email: string;
+  nick_name: string;
+  first_name?: string;
+  last_name?: string;
+  birth_day?: Date;
+  password: string;
+  friends?: [mongoose.Types.ObjectId];
+  rooms?: [any];
+  dues?: [any];
+  addFriend(id: string): UserModel;
+  getFriends(): UserModel;
+}
 
 //Creating the User schema
 const userSchema = new mongoose.Schema(
@@ -65,14 +100,19 @@ const userSchema = new mongoose.Schema(
 //Before a User is saved or updated encrypts the password property
 userSchema.pre("save", async function (done) {
   if (this.isDirectModified("password")) {
-    const hashed = await toHash(this.get("password"));
+    const hashed = await Password.toHash(this.get("password"));
 
     this.set("password", hashed);
   }
   done();
 });
 
-userSchema.methods.addFriend = function (id) {
+userSchema.statics.build = (attrs: UserAttrs) => {
+  return new User(attrs);
+};
+
+userSchema.methods.addFriend = function (id: string) {
+  console.log("Friend added");
   User.findByIdAndUpdate(id, {
     $push: { friends: this.id },
   }).exec();
@@ -87,6 +127,6 @@ userSchema.methods.getFriends = function () {
     .exec();
 };
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model<UserDoc, UserModel>("user", userSchema);
 
-module.exports = User;
+export { User };

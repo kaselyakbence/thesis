@@ -1,27 +1,27 @@
-const express = require("express");
+import express, { Request, Response } from "express";
 
 //Npm package that renders express thrown errors async
-require("express-async-errors");
+import "express-async-errors";
 
 //Config enviroment files
 require("dotenv").config();
 
 //Routers
-const userRouter = require("./routes/auth");
+import { userRouter } from "./routes/auth";
 
 //Errors
-const NotFoundError = require("./errors/not-found-error");
+import { NotFoundError } from "./errors/not-found-error";
 
 //Error handler
-const errorHandler = require("./middlewares/error-handler");
+import { errorHandler } from "./middlewares/error-handler";
 
 const app = express();
 
 //Parse body to json
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.status(200).send("1.0.2");
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).send("1.0.3");
 });
 
 app.use("/user", userRouter);
@@ -34,4 +34,4 @@ app.all("*", async () => {
 //Error handler
 app.use(errorHandler);
 
-module.exports = app;
+export { app };

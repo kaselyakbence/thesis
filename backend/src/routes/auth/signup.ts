@@ -1,11 +1,11 @@
 //Libraries
-const express = require("express");
-const { body, validationResult } = require("express-validator");
+import express, { Request, Response } from "express";
+import { body, validationResult } from "express-validator";
 
 //Models
-const User = require("../../models/User");
+import { User } from "../../models/User";
 
-const validateRequest = require("../../middlewares/validate-request");
+import { validateRequest } from "../../middlewares/validate-request";
 
 const router = express.Router();
 
@@ -23,13 +23,13 @@ router.post(
       .withMessage("Password must be between 4 and 20 characters "),
   ],
   validateRequest,
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     const { nick_name, email, password } = req.body;
 
-    user = new User({ nick_name, email, password });
+    let user = new User({ nick_name, email, password });
 
     res.send(user);
   }
 );
 
-module.exports = router;
+export { router as signUpRouter };

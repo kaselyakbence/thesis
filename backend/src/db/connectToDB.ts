@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
-const env = process.env.ENV || "development";
+const env = process.env.APP_ENV || "development";
 
 //Function to connect to MongoDB based on enviroment
 const connect = async () => {
@@ -19,7 +19,7 @@ const connect = async () => {
     }
   } else {
     //Connecting to local MongoDB instance
-    mongo = new MongoMemoryServer();
+    const mongo = new MongoMemoryServer();
 
     const mongoUri = await mongo.getUri();
 
@@ -33,6 +33,4 @@ const connect = async () => {
   }
 };
 
-module.exports = {
-  connect,
-};
+export { connect };
