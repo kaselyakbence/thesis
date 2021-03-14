@@ -1,12 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-import LogRocket from "logrocket";
-LogRocket.init("txvrtg/thesis");
+import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <h1>React app!</h1>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -1,8 +1,8 @@
-name: CI/CD
+name: Testing
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
   pull_request:
     branches: [main]
 
@@ -22,27 +22,21 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Setup and Build Backend App
+      - name: Setup Backend App
         working-directory: backend
-        env:
-          DB_CONNECTION: ${{secrets.DB_CONNECTION}}
         run: |
           npm i
-          npm run build
-          touch .env
-          echo $DB_CONNECTION >> .env
-          echo APP_ENV=production >> .env
-          pm2 restart Thesis
 
       - name: Testing Backend App
         working-directory: backend
         run: npm test -- --coverage
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
 
-      - name: Setup and Build Frontend App
+      - name: Setup Frontend App
         working-directory: frontend
         run: |
           npm i
-          npm run build
+    
+      - name: Testing Frontend App
+        working-directory: frontend
+        run: npm test -- --coverage

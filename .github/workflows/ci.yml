@@ -1,0 +1,41 @@
+name: CI/CD
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches: [main]
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup and Build Backend App
+        working-directory: backend
+        env:
+          DB_CONNECTION: ${{secrets.DB_CONNECTION}}
+        run: |
+          npm i
+          npm run build
+          touch .env
+          echo $DB_CONNECTION >> .env
+          echo APP_ENV=production >> .env
+          pm2 restart Thesis
+
+      - name: Setup and Build Frontend App
+        working-directory: frontend
+        run: |
+          npm i
+          npm run build
