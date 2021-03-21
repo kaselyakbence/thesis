@@ -5,18 +5,16 @@ import { body } from "express-validator";
 //Models
 import { User } from "../../models/User";
 
+//Middlewares
 import { validateRequest } from "../../middlewares/validate-request";
 
 //Errors
 import { BadRequestError } from "../../errors/bad-request-error";
 
-//Utils
-import { Password } from "../../utils/password";
-
 const router = express.Router();
 
 router.post(
-  "/signup",
+  "/register",
   [
     body("nick_name")
       .trim()
@@ -56,7 +54,7 @@ router.post(
     }
 
     if (password !== password2) {
-      throw new BadRequestError("Password not matching");
+      throw new BadRequestError("Passwords are not matching");
     }
 
     const user = User.build({
@@ -69,7 +67,7 @@ router.post(
     });
     await user.save();
 
-    res.send(user);
+    res.status(201).send(user);
   }
 );
 

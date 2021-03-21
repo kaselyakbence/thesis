@@ -8,11 +8,13 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.9.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.20",
+    "@types/jsonwebtoken": "^8.5.1",
     "@types/supertest": "^2.0.10",
     "jest": "^26.6.3",
     "mongodb-memory-server": "^6.9.3",
@@ -39,7 +41,6 @@
     ],
     "testMatch": [
       "<rootDir>/src/**/*.test.ts"
-  ]
-    
+    ]
   }
 }

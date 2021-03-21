@@ -2,13 +2,13 @@ name: CI/CD
 
 on:
   pull_request:
-    types: [ closed ]
+    types: [closed]
     branches: [main]
 
 jobs:
   build:
     if: github.event.pull_request.merged == true
-    runs-on: [self-hosted,production]
+    runs-on: [self-hosted, production]
 
     strategy:
       matrix:
@@ -26,12 +26,14 @@ jobs:
         working-directory: backend
         env:
           DB_CONNECTION: ${{secrets.DB_CONNECTION}}
+          JWT_KEY: ${{secrets.JWT_KEY}}
         run: |
           npm i
           npm run build
           touch .env
           echo $DB_CONNECTION >> .env
           echo APP_ENV=production >> .env
+          echo $JWT_KEY >> .env
           pm2 restart Thesis
 
       - name: Setup and Build Frontend App
