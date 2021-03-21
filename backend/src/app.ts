@@ -24,7 +24,7 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).send("1.0.5");
 });
 
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 //If Router not found
 app.all("*", async () => {
