@@ -8,7 +8,7 @@ interface UserAttrs {
   nick_name: string;
   first_name?: string;
   last_name?: string;
-  birth_day?: Date;
+  dob?: Date;
   password: string;
   friends?: [mongoose.Types.ObjectId];
   rooms?: [any];
@@ -28,7 +28,7 @@ interface UserDoc extends mongoose.Document {
   nick_name: string;
   first_name?: string;
   last_name?: string;
-  birth_day?: Date;
+  dob?: Date;
   password: string;
   friends?: [mongoose.Types.ObjectId];
   rooms?: [any];
@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema(
     last_name: {
       type: String,
     },
-    birth_day: {
+    dob: {
       type: Date,
     },
     password: {
