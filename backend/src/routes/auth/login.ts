@@ -14,7 +14,6 @@ import { BadRequestError } from "../../errors/bad-request-error";
 
 //Utilities
 import { Password } from "../../utils/password";
-import { authorize } from "../../middlewares/authorization-middleware";
 
 const router = express.Router();
 

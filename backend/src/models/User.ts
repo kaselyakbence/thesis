@@ -112,7 +112,6 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 };
 
 userSchema.methods.addFriend = function (id: string) {
-  console.log("Friend added");
   User.findByIdAndUpdate(id, {
     $push: { friends: this.id },
   }).exec();
