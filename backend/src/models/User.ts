@@ -23,7 +23,7 @@ interface UserModel extends mongoose.Model<any> {
 }
 
 //Interface for the properties of User Document
-interface UserDoc extends mongoose.Document {
+export interface UserDoc extends mongoose.Document {
   email: string;
   nick_name: string;
   first_name?: string;
@@ -67,6 +67,12 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Types.ObjectId,
         ref: "user",
+      },
+    ],
+    events: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "event",
       },
     ],
     rooms: [],
