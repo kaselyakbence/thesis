@@ -2,15 +2,7 @@ import request from "supertest";
 
 import { app } from "../app";
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      registerExample(): void;
-    }
-  }
-}
-
-global.registerExample = async () => {
+export const registerExample = async () => {
   await request(app).post("/auth/register").send({
     nick_name: "user",
     email: "test@gmail.com",

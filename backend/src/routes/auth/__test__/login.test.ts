@@ -1,6 +1,8 @@
 import request from "supertest";
 import { app } from "../../../app";
 
+import { registerExample } from "../../../test/helpers";
+
 //Succesfull log in
 it("Logs in succesfully", async () => {
   await registerExample();
