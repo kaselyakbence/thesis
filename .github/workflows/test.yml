@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted,test_runner]
+    runs-on: [self-hosted, test_runner]
 
     strategy:
       matrix:
@@ -29,14 +29,13 @@ jobs:
 
       - name: Testing Backend App
         working-directory: backend
-        run: npm test -- --coverage
-
+        run: npm test
 
       - name: Setup Frontend App
         working-directory: frontend
         run: |
           npm i
-    
+
       - name: Testing Frontend App
         working-directory: frontend
-        run: npm test -- --coverage
+        run: npm test
