@@ -10,7 +10,7 @@ import { User } from "../../models/User";
 const router = express.Router();
 
 router.get(
-  "/visit/:nick_name",
+  "/:nick_name/visit",
   authorize,
   async (req: Request, res: Response) => {
     const { nick_name } = req.params;

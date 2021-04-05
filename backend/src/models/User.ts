@@ -172,7 +172,7 @@ userSchema.methods.getFriends = function () {
 };
 
 userSchema.methods.getFriendRequests = async function () {
-  return User.findOne({ _id: this.id }, { events: 1 })
+  return User.findById(this.id, "events")
     .populate({
       path: "events",
       match: { type: "FRIEND_REQUEST" },

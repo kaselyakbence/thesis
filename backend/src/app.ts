@@ -9,6 +9,8 @@ require("dotenv").config();
 //Routers
 import { authRouter } from "./routes/auth";
 import { userRouter } from "./routes/user";
+import { profileRouter } from "./routes/profile";
+import { eventRouter } from "./routes/events";
 
 //Errors
 import { NotFoundError } from "./errors/not-found-error";
@@ -28,6 +30,10 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/auth", authRouter);
 
 app.use("/users", userRouter);
+
+app.use("/profile", profileRouter);
+
+app.use("/events", eventRouter);
 
 //If Router not found
 app.all("*", async () => {
