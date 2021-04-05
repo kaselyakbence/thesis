@@ -5,7 +5,7 @@ import { registerExample } from "../../../test/helpers";
 
 //Succesfull log in
 it("Logs in succesfully", async () => {
-  await registerExample();
+  await registerExample("");
 
   return request(app)
     .post("/auth/login")
@@ -15,7 +15,7 @@ it("Logs in succesfully", async () => {
 
 //Unsuccesfull log ins
 it("Invalid nickname", async () => {
-  await registerExample();
+  await registerExample("");
 
   return request(app)
     .post("/auth/login")
@@ -24,7 +24,7 @@ it("Invalid nickname", async () => {
 });
 
 it("Incorrect nickname", async () => {
-  await registerExample();
+  await registerExample("");
 
   return request(app)
     .post("/auth/login")
@@ -33,7 +33,7 @@ it("Incorrect nickname", async () => {
 });
 
 it("Incorrect password", async () => {
-  await registerExample();
+  await registerExample("");
 
   return request(app)
     .post("/auth/login")
