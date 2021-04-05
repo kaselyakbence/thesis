@@ -7,7 +7,8 @@ import "express-async-errors";
 require("dotenv").config();
 
 //Routers
-import { userRouter } from "./routes/auth";
+import { authRouter } from "./routes/auth";
+import { userRouter } from "./routes/user";
 
 //Errors
 import { NotFoundError } from "./errors/not-found-error";
@@ -24,7 +25,9 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).send("1.0.5");
 });
 
-app.use("/auth", userRouter);
+app.use("/auth", authRouter);
+
+app.use("/users", userRouter);
 
 //If Router not found
 app.all("*", async () => {

@@ -10,7 +10,7 @@ const port = 11111;
 app.listen(port, async () => {
   //Connect to MongoDB database
   await connect();
-
+  /*
   const user = await User.build({
     email: "test@test.com",
     nick_name: "test",
@@ -34,6 +34,6 @@ app.listen(port, async () => {
 
   //await friend_req.accept();
   console.log(await user2.getFriendRequests());
-
+*/
   console.log(`App listening at http://localhost:${port}`);
 });

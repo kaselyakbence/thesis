@@ -10,9 +10,7 @@ interface UserAttrs {
   last_name?: string;
   dob?: Date;
   password: string;
-  friends?: [mongoose.Types.ObjectId];
-  rooms?: [any];
-  dues?: [any];
+  is_public?: boolean;
 }
 
 //Interface for UserModel
@@ -34,9 +32,20 @@ export interface UserDoc extends mongoose.Document {
   friends?: [mongoose.Types.ObjectId];
   rooms?: [any];
   dues?: [any];
+  is_public: boolean;
   addFriend(id: string): UserModel;
   getFriends(): UserModel;
   getFriendRequests(): any;
+  visit():
+    | {
+        nick_name: string;
+        email: string;
+        first_name: string;
+        last_name: string;
+        dob: Date;
+        friends: [any];
+      }
+    | { nick_name: string; isPublic: boolean };
 }
 
 //Creating the User schema
@@ -79,6 +88,11 @@ const userSchema = new mongoose.Schema(
     ],
     rooms: [],
     dues: [],
+    is_public: {
+      type: Boolean,
+      default: true,
+      require: true,
+    },
   },
 
   {
@@ -119,6 +133,23 @@ userSchema.pre("save", async function (done) {
 
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
+};
+
+userSchema.methods.visit = async function () {
+  if (this.get("is_public")) {
+    return {
+      nick_name: this.get("nick_name"),
+      email: this.get("email"),
+      first_name: this.get("first_name"),
+      last_name: this.get("last_name"),
+      dob: this.get("dob"),
+    };
+  } else {
+    return {
+      nick_name: this.get("nick_name"),
+      isPublic: false,
+    };
+  }
 };
 
 userSchema.methods.addFriend = async function (nick_name: string) {
