@@ -12,7 +12,7 @@ import { User } from "../../models/User";
 const router = express.Router();
 
 router.get(
-  "/friend_requests",
+  "/friendrequests",
   authorize,
   async (req: Request, res: Response) => {
     if (!req.currentUser?.id) throw new UnauthorizedError();
