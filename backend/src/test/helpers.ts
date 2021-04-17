@@ -2,12 +2,30 @@ import request from "supertest";
 
 import { app } from "../app";
 
-export const registerExample = async () => {
-  await request(app).post("/auth/register").send({
-    nick_name: "user",
-    email: "test@gmail.com",
+import { User, UserDoc } from "../models/User";
+import { Event } from "../models/Event";
+
+const testpw = "password";
+
+export const registerExample = async (str: string) => {
+  const event = User.build({
+    nick_name: `user${str}`,
+    email: `test${str}@gmail.com`,
     first_name: "User",
-    password: "password",
-    password2: "password",
+    password: testpw,
   });
+
+  await event.save();
+
+  return event;
+};
+
+export const logInExample = async (user: UserDoc) => {
+  const { nick_name } = user;
+
+  const res = await request(app)
+    .post("/auth/login")
+    .send({ nick_name, password: testpw });
+
+  return res.body.jwt_token;
 };

@@ -16,7 +16,7 @@ const router = express.Router();
 router.get("/:pubId/accept", authorize, async (req: Request, res: Response) => {
   const { pubId } = req.params;
 
-  const event = await Event.findOne({ pubId });
+  const event = await Event.findOne({ pubId }).exec();
 
   if (!event) throw new BadRequestError("Event not found");
 
