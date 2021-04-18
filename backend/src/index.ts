@@ -2,6 +2,7 @@ import { app } from "./app";
 import { connect } from "./db/connectToDB";
 
 import { User } from "./models/User";
+import { Room } from "./models/Room";
 
 const port = 11111;
 

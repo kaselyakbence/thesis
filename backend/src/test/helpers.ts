@@ -3,7 +3,7 @@ import request from "supertest";
 import { app } from "../app";
 
 import { User, UserDoc } from "../models/User";
-import { Event } from "../models/Event";
+//import { Event } from "../models/Event";
 
 const testpw = "password";
 

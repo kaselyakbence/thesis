@@ -16,7 +16,7 @@ interface UserAttrs {
 //Interface for UserModel
 interface UserModel extends mongoose.Model<any> {
   build(attrs: UserAttrs): UserDoc;
-  addFriend(id: string): UserModel;
+  addFriend(id: string): Promise<UserModel>;
   getFriends(): UserModel;
   getFriendRequests(): any;
 }
@@ -29,8 +29,13 @@ export interface UserDoc extends mongoose.Document {
   last_name?: string;
   dob?: Date;
   password: string;
-  friends?: [mongoose.Types.ObjectId];
-  rooms?: [any];
+  friends?: [{ type: mongoose.Types.ObjectId; ref: "user" }];
+  rooms?: [
+    {
+      type: mongoose.Types.ObjectId;
+      ref: "room";
+    }
+  ];
   dues?: [any];
   is_public: boolean;
   addFriend(id: string): UserModel;
@@ -99,7 +104,7 @@ const userSchema = new mongoose.Schema(
     //Creating JSON from a User instance excludes sensible data
     toJSON: {
       transform: function (doc, ret) {
-        ret.id = ret._id;
+        //ret.id = ret._id;
         delete ret._id;
 
         delete ret.password;
@@ -109,7 +114,7 @@ const userSchema = new mongoose.Schema(
     //Creating an Object from a User instance excludes sensible data
     toObject: {
       transform: function (doc, ret) {
-        ret.id = ret._id;
+        //ret.id = ret._id;
         delete ret._id;
 
         delete ret.password;
@@ -153,15 +158,12 @@ userSchema.methods.visit = async function () {
 };
 
 userSchema.methods.addFriend = async function (nick_name: string) {
-  const user = await User.findOne({ nick_name });
-  user
-    .updateOne({
-      $push: { friends: this.id },
-    })
-    .exec();
+  await this.update({
+    $push: { friends: this.id },
+  }).exec();
 
   return this.updateOne({
-    $push: { friends: user.id },
+    $push: { friends: this.get("id") },
   }).exec();
 };
 

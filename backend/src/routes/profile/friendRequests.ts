@@ -17,7 +17,7 @@ router.get(
   async (req: Request, res: Response) => {
     if (!req.currentUser?.id) throw new UnauthorizedError();
 
-    const user = await User.findById(req.currentUser.id);
+    const user = await User.findById(req.currentUser.id).exec();
 
     if (!user) throw new BadRequestError("User not found");
 
