@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 import { Password } from "../utils/password";
 
+import { EventType } from "./Event";
+
 //Interface for User
 interface UserAttrs {
   email: string;
@@ -16,9 +18,9 @@ interface UserAttrs {
 //Interface for UserModel
 interface UserModel extends mongoose.Model<any> {
   build(attrs: UserAttrs): UserDoc;
-  addFriend(id: string): Promise<UserModel>;
-  getFriends(): UserModel;
-  getFriendRequests(): any;
+  addFriend(nick_name: string): Promise<UserModel>;
+  getFriends(): Promise<UserModel>;
+  getRequests(): Promise<any[]>;
 }
 
 //Interface for the properties of User Document
@@ -38,19 +40,28 @@ export interface UserDoc extends mongoose.Document {
   ];
   dues?: [any];
   is_public: boolean;
-  addFriend(id: string): UserModel;
-  getFriends(): UserModel;
-  getFriendRequests(): any;
-  visit():
+  addFriend(nick_name: string): Promise<UserModel>;
+  getFriends(): Promise<{ friends: { nick_name: string }[] }>;
+  getRequests(): Promise<{
+    events: [
+      {
+        pubId: string;
+        type: EventType;
+        owner: mongoose.Types.ObjectId;
+        from: mongoose.Types.ObjectId;
+      }
+    ];
+  }>;
+  visit(): Promise<
     | {
         nick_name: string;
         email: string;
-        first_name: string;
-        last_name: string;
-        dob: Date;
-        friends: [any];
+        first_name?: string;
+        last_name?: string;
+        dob?: Date;
       }
-    | { nick_name: string; isPublic: boolean };
+    | { nick_name: string; isPublic: boolean }
+  >;
 }
 
 //Creating the User schema
@@ -91,7 +102,12 @@ const userSchema = new mongoose.Schema(
         ref: "event",
       },
     ],
-    rooms: [],
+    rooms: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "room",
+      },
+    ],
     dues: [],
     is_public: {
       type: Boolean,
@@ -157,13 +173,13 @@ userSchema.methods.visit = async function () {
   }
 };
 
-userSchema.methods.addFriend = async function (nick_name: string) {
-  await this.update({
+userSchema.methods.addFriend = async function (uid: string) {
+  await User.findByIdAndUpdate(uid, {
     $push: { friends: this.id },
   }).exec();
 
   return this.updateOne({
-    $push: { friends: this.get("id") },
+    $push: { friends: uid },
   }).exec();
 };
 
@@ -173,12 +189,11 @@ userSchema.methods.getFriends = function () {
     .exec();
 };
 
-userSchema.methods.getFriendRequests = async function () {
+userSchema.methods.getRequests = function () {
   return User.findById(this.id, "events")
     .populate({
       path: "events",
-      match: { type: "FRIEND_REQUEST" },
-      select: ["pubId", "owner"],
+      select: ["pubId", "owner", "from", "type"],
     })
     .exec();
 };

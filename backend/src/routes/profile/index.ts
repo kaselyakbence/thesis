@@ -2,7 +2,7 @@
 import express from "express";
 
 //Import routes
-import { friendRequestsRouter } from "./friendRequests";
+import { friendRequestsRouter } from "./requests";
 import { friendsRouter } from "./friends";
 
 const router = express.Router();

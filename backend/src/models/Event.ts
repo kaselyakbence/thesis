@@ -5,20 +5,29 @@ import { nanoid } from "nanoid";
 import { User, UserDoc } from "./User";
 import { Room, RoomDoc } from "./Room";
 
-type EventType = "FRIEND_REQUEST" | "PARTICIPATION_REQUEST";
+export type EventType = "FRIEND_REQUEST" | "PARTICIPATION_REQUEST";
 
 //Interface for Event
 interface EventAttrs {
   type: EventType;
-  owner: string;
+  owner: mongoose.Types.ObjectId;
   payload?: string;
-  to: string;
+  from?: mongoose.Types.ObjectId;
+  to?: mongoose.Types.ObjectId;
 }
 
 //Interface for EventModel
 interface EventModel extends mongoose.Model<any> {
   build(attrs: EventAttrs): EventDoc;
-  buildFriendRequest(owner: string, friend: string): EventDoc;
+  buildFriendRequest(
+    owner: mongoose.Types.ObjectId,
+    friend: mongoose.Types.ObjectId
+  ): EventDoc;
+  buildParticipationRequest(
+    roomId: mongoose.Types.ObjectId,
+    from: mongoose.Types.ObjectId,
+    to: mongoose.Types.ObjectId
+  ): EventDoc;
   accept(): Promise<any>;
   reject(): Promise<any>;
 }
@@ -28,6 +37,7 @@ interface EventDoc extends mongoose.Document {
   pubId: string;
   type: string;
   owner: string;
+  from: string;
   to?: string;
   payload?: string;
   accept(): Promise<any>;
@@ -47,14 +57,19 @@ const eventSchema = new mongoose.Schema(
       require: true,
     },
     owner: {
-      type: String,
+      type: mongoose.Types.ObjectId,
       require: true,
     },
     payload: {
       type: String,
     },
+    from: {
+      type: mongoose.Types.ObjectId,
+      ref: "user",
+    },
     to: {
-      type: String,
+      type: mongoose.Types.ObjectId,
+      ref: "user",
     },
   },
   {
@@ -79,29 +94,17 @@ const eventSchema = new mongoose.Schema(
 
 eventSchema.pre("save", async function (done) {
   if (this.isNew) {
-    await User.findOneAndUpdate(
-      { nick_name: this.get("to") },
-      {
-        $push: { events: this.id },
-      }
-    ).exec();
+    await User.findByIdAndUpdate(this.get("to"), {
+      $push: { events: this.id },
+    }).exec();
   }
   done();
 });
 
 eventSchema.pre("remove", async function (done) {
-  await User.findOneAndUpdate(
-    { nick_name: this.get("owner") },
-    {
-      $pull: { events: this.id },
-    }
-  ).exec();
-  await User.findOneAndUpdate(
-    { nick_name: this.get("to") },
-    {
-      $pull: { events: this.id },
-    }
-  ).exec();
+  await User.findByIdAndUpdate(this.get("to"), {
+    $pull: { events: this.id },
+  }).exec();
   done();
 });
 
@@ -109,20 +112,30 @@ eventSchema.statics.build = (attrs: EventAttrs) => {
   return new Event({ pubId: nanoid(), ...attrs });
 };
 
-eventSchema.statics.buildFriendRequest = (roomId: string, to: string) => {
-  return Event.build({ type: "FRIEND_REQUEST", owner: roomId, to });
+eventSchema.statics.buildFriendRequest = (
+  owner: mongoose.Types.ObjectId,
+  to: mongoose.Types.ObjectId
+) => {
+  return Event.build({ type: "FRIEND_REQUEST", owner, from: owner, to });
 };
 
-eventSchema.statics.buildPArticipationRequest = (owner: string, to: string) => {
-  return Event.build({ type: "PARTICIPATION_REQUEST", owner, to });
+eventSchema.statics.buildParticipationRequest = (
+  roomId: mongoose.Types.ObjectId,
+  from: mongoose.Types.ObjectId,
+  to: mongoose.Types.ObjectId
+) => {
+  return Event.build({
+    type: "PARTICIPATION_REQUEST",
+    owner: roomId,
+    from,
+    to,
+  });
 };
 
 eventSchema.methods.accept = async function () {
   switch (this.get("type")) {
     case "FRIEND_REQUEST":
-      const user = (await User.findOne({
-        nick_name: this.get("owner"),
-      }).exec()) as UserDoc;
+      const user = (await User.findById(this.get("owner")).exec()) as UserDoc;
       user.addFriend(this.get("to"));
       return this.remove();
     case "PARTICIPATION_REQUEST":

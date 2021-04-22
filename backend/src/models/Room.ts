@@ -6,7 +6,7 @@ import { User } from "./User";
 
 //Interface for Room
 interface RoomAttrs {
-  owner: string;
+  owner: mongoose.Types.ObjectId;
   name: string;
   description?: string;
 }
@@ -20,11 +20,12 @@ interface RoomModel extends mongoose.Model<any> {
     name: string;
     description: string;
   };
-  addUser(uid: string): Promise<any>;
+  addUser(uid: mongoose.Types.ObjectId): Promise<any>;
 }
 
 //Interface for the properties of Room Document
 export interface RoomDoc extends mongoose.Document {
+  pubId: string;
   name: string;
   description: string;
   owner: string;
@@ -120,12 +121,12 @@ roomSchema.methods.visit = async function () {
     .exec();
 };
 
-roomSchema.methods.addUser = async function (uid: string) {
+roomSchema.methods.addUser = async function (uid: mongoose.Types.ObjectId) {
   await User.findByIdAndUpdate(uid, {
     $push: { rooms: this.get("id") },
   }).exec();
 
-  return this.update({
+  return this.updateOne({
     $push: { participants: uid },
   }).exec();
 };
