@@ -56,10 +56,9 @@ export interface UserDoc extends mongoose.Document {
     | {
         nick_name: string;
         email: string;
-        first_name: string;
-        last_name: string;
-        dob: Date;
-        friends: [any];
+        first_name?: string;
+        last_name?: string;
+        dob?: Date;
       }
     | { nick_name: string; isPublic: boolean }
   >;
