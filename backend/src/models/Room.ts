@@ -125,7 +125,7 @@ roomSchema.methods.addUser = async function (uid: string) {
     $push: { rooms: this.get("id") },
   }).exec();
 
-  return this.update({
+  return this.updateOne({
     $push: { participants: uid },
   }).exec();
 };

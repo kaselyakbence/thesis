@@ -11,15 +11,19 @@ import { User } from "../../models/User";
 
 const router = express.Router();
 
-router.get("/friends", authorize, async (req: Request, res: Response) => {
+router.get("/requests", authorize, async (req: Request, res: Response) => {
   if (!req.currentUser?.id) throw new UnauthorizedError();
 
   const user = await User.findById(req.currentUser.id).exec();
 
   if (!user) throw new BadRequestError("User not found");
 
-  const friends = await user.getFriends();
-  return res.send(friends.friends);
+  try {
+    const userRequests = await user.getRequests();
+    return res.send(userRequests.events);
+  } catch (e) {
+    return res.status(203).send([]);
+  }
 });
 
-export { router as friendsRouter };
+export { router as friendRequestsRouter };

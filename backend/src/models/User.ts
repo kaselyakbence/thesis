@@ -18,7 +18,7 @@ interface UserModel extends mongoose.Model<any> {
   build(attrs: UserAttrs): UserDoc;
   addFriend(id: string): Promise<UserModel>;
   getFriends(): UserModel;
-  getFriendRequests(): any;
+  getRequests(): any;
 }
 
 //Interface for the properties of User Document
@@ -40,7 +40,7 @@ export interface UserDoc extends mongoose.Document {
   is_public: boolean;
   addFriend(id: string): UserModel;
   getFriends(): UserModel;
-  getFriendRequests(): any;
+  getRequests(): any;
   visit():
     | {
         nick_name: string;
@@ -158,7 +158,7 @@ userSchema.methods.visit = async function () {
 };
 
 userSchema.methods.addFriend = async function (nick_name: string) {
-  await this.update({
+  await this.updateOne({
     $push: { friends: this.id },
   }).exec();
 
@@ -173,12 +173,11 @@ userSchema.methods.getFriends = function () {
     .exec();
 };
 
-userSchema.methods.getFriendRequests = async function () {
+userSchema.methods.getRequests = async function () {
   return User.findById(this.id, "events")
     .populate({
       path: "events",
-      match: { type: "FRIEND_REQUEST" },
-      select: ["pubId", "owner"],
+      select: ["pubId", "owner", "type"],
     })
     .exec();
 };
