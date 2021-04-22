@@ -26,13 +26,13 @@ jobs:
       - name: Setup and Test Backend App
         working-directory: backend
         run: |
-         npm i
+         npm ci
          npm test
 
       - name: Setup Frontend App
         working-directory: frontend
         run: |
-          npm i
+          npm ci
 
       - name: Setup and Test Frontend App
         working-directory: frontend
