@@ -10,11 +10,10 @@ import { validateRequest } from "../../middlewares/validate-request";
 import { User } from "../../models/User";
 
 //Errors
-import { BadRequestError } from "../../errors/bad-request-error";
+import { ForbiddenError } from "../../errors/forbidden-error";
 
 //Utilities
 import { Password } from "../../utils/password";
-import { authorize } from "../../middlewares/authorization-middleware";
 
 const router = express.Router();
 
@@ -34,13 +33,13 @@ router.post(
     const user = await User.findOne({ nick_name });
 
     if (!user) {
-      throw new BadRequestError("User not found!");
+      throw new ForbiddenError("User not found!");
     }
 
     const pwMatch = await Password.compare(user.password, password);
 
     if (!pwMatch) {
-      throw new BadRequestError("Wrong password!");
+      throw new ForbiddenError("Wrong password!");
     }
 
     const jwt_token = await jwt.sign(

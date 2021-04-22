@@ -4,10 +4,14 @@ import express, { Request, Response } from "express";
 import "express-async-errors";
 
 //Config enviroment files
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 //Routers
-import { userRouter } from "./routes/auth";
+import { authRouter } from "./routes/auth";
+import { userRouter } from "./routes/user";
+import { profileRouter } from "./routes/profile";
+import { eventRouter } from "./routes/events";
 
 //Errors
 import { NotFoundError } from "./errors/not-found-error";
@@ -24,7 +28,13 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).send("1.0.5");
 });
 
-app.use("/auth", userRouter);
+app.use("/auth", authRouter);
+
+app.use("/users", userRouter);
+
+app.use("/profile", profileRouter);
+
+app.use("/events", eventRouter);
 
 //If Router not found
 app.all("*", async () => {

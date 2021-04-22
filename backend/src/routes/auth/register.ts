@@ -40,6 +40,7 @@ router.post(
       first_name,
       last_name,
       dob,
+      is_public,
     } = req.body;
 
     const isEmailUnique = await User.findOne({ email });
@@ -64,6 +65,7 @@ router.post(
       first_name,
       last_name,
       dob,
+      is_public,
     });
     await user.save();
 

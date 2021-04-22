@@ -11,4 +11,4 @@ router.use(signUpRouter);
 
 router.use(loginRouter);
 
-export { router as userRouter };
+export { router as authRouter };

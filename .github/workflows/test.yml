@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted,test_runner]
+    runs-on: [self-hosted, test_runner]
 
     strategy:
       matrix:
@@ -22,21 +22,17 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Setup Backend App
+
+      - name: Setup and Test Backend App
         working-directory: backend
         run: |
-          npm i
-
-      - name: Testing Backend App
-        working-directory: backend
-        run: npm test -- --coverage
+         npm ci
+         npm test
 
 
-      - name: Setup Frontend App
+      - name: Setup and Test Frontend App
         working-directory: frontend
         run: |
-          npm i
-    
-      - name: Testing Frontend App
-        working-directory: frontend
-        run: npm test -- --coverage
+          npm ci
+          npm test
+        
