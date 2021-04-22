@@ -8,6 +8,10 @@ import { authorize } from "../../middlewares/authorization-middleware";
 //Models
 import { User } from "../../models/User";
 import { Event } from "../../models/Event";
+
+import { Types } from "mongoose";
+
+//Error
 import { UnauthorizedError } from "../../errors/unauthorized-error";
 
 const router = express.Router();
@@ -26,8 +30,8 @@ router.post(
 
     try {
       const event = Event.buildFriendRequest(
-        req.currentUser?.nick_name,
-        nick_name
+        new Types.ObjectId(req.currentUser?.id),
+        user.id
       );
 
       event.save();

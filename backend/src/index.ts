@@ -3,6 +3,7 @@ import { connect } from "./db/connectToDB";
 
 import { User } from "./models/User";
 import { Room } from "./models/Room";
+import { Event } from "./models/Event";
 
 const port = 11111;
 
@@ -10,7 +11,7 @@ const port = 11111;
 app.listen(port, async () => {
   //Connect to MongoDB database
   await connect();
-  /*
+
   //TESTING
   const user = User.build({
     email: "test@test.com",
@@ -33,9 +34,21 @@ app.listen(port, async () => {
   });
   await room.save();
 
-  await room.addUser(user2.id);
+  const friendRequest = Event.buildFriendRequest(user.id, user2.id);
 
-  console.log(await user.getRequests());*/
+  const requestToRoom = Event.buildParticipationRequest(
+    room.id,
+    user.id,
+    user2.id
+  );
+
+  await requestToRoom.save();
+  await friendRequest.save();
+
+  await requestToRoom.accept();
+  //await friendRequest.accept();
+
+  console.log(await user2.visit());
 
   console.log(`App listening at http://localhost:${port}`);
 });
