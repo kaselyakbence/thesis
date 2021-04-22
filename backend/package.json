@@ -30,7 +30,7 @@
   "scripts": {
     "start": "ts-node-dev --poll src/index.ts",
     "build": "rimraf build && tsc -p .",
-    "test": "jest  --no-cache --maxWorkers=1"
+    "test": "jest  --no-cache --maxWorkers=50%"
   },
   "author": "Kaselyák Bence",
   "license": "ISC",
