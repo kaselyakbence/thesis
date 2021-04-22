@@ -4,7 +4,8 @@ import express, { Request, Response } from "express";
 import "express-async-errors";
 
 //Config enviroment files
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 //Routers
 import { authRouter } from "./routes/auth";

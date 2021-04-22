@@ -10,6 +10,7 @@ interface UserPayload {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       currentUser?: UserPayload;
@@ -17,7 +18,11 @@ declare global {
   }
 }
 
-export const authorize = (req: Request, res: Response, next: NextFunction) => {
+export const authorize = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 

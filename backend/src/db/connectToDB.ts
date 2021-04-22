@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
-const { MongoMemoryServer } = require("mongodb-memory-server");
+import mongoose from "mongoose";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
 const env = process.env.APP_ENV || "development";
 
 //Function to connect to MongoDB based on enviroment
-const connect = async () => {
+const connect = async (): Promise<void> => {
   if (env === "production") {
     //Connection to MongoDB Atlas
     try {
-      await mongoose.connect(process.env.DB_CONNECTION, {
+      await mongoose.connect(process.env.DB_CONNECTION ?? "", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
