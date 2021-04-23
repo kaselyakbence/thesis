@@ -33,6 +33,8 @@
   "scripts": {
     "start": "ts-node-dev --poll src/index.ts",
     "build": "rimraf build && tsc -p .",
+    "lint": "eslint src/**/*.ts",
+    "format": "eslint src/**/*.ts --fix",
     "test": "jest  --no-cache --maxWorkers=50%"
   },
   "author": "Kaselyák Bence",
