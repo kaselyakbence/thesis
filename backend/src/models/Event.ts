@@ -135,13 +135,16 @@ eventSchema.statics.buildParticipationRequest = (
 eventSchema.methods.accept = async function () {
   switch (this.get("type")) {
     case "FRIEND_REQUEST":
-      const user = (await User.findById(this.get("owner")).exec()) as UserDoc;
-      user.addFriend(this.get("to"));
+      {
+        const user = (await User.findById(this.get("owner")).exec()) as UserDoc;
+        user.addFriend(this.get("to"));
+      }
       return this.remove();
-    case "PARTICIPATION_REQUEST":
+    case "PARTICIPATION_REQUEST": {
       const room = (await Room.findById(this.get("owner")).exec()) as RoomDoc;
       room.addUser(this.get("to"));
       return this.remove();
+    }
   }
 };
 
