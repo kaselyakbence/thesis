@@ -30,7 +30,7 @@ router.post(
   async (req: Request, res: Response) => {
     const { nick_name, password } = req.body;
 
-    const user = await User.findOne({ nick_name });
+    const user = await User.findOne({ nick_name }).exec();
 
     if (!user) {
       throw new ForbiddenError("User not found!");
@@ -42,12 +42,12 @@ router.post(
       throw new ForbiddenError("Wrong password!");
     }
 
-    const jwt_token = await jwt.sign(
+    const jwt_token = jwt.sign(
       {
         id: user.id,
         nick_name: user.nick_name,
       },
-      process.env.JWT_KEY!
+      process.env.JWT_KEY ?? ""
     );
 
     res.status(200).send({ jwt_token });

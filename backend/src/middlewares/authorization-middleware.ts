@@ -29,7 +29,7 @@ export const authorize = (
   if (!token) throw new UnauthorizedError();
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_KEY!) as UserPayload;
+    const payload = jwt.verify(token, process.env.JWT_KEY ?? "") as UserPayload;
 
     req.currentUser = payload;
   } catch (e) {
