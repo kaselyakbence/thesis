@@ -7,7 +7,7 @@ import { User, UserDoc } from "../models/User";
 
 const testpw = "password";
 
-export const registerExample = async (str: string) => {
+export const registerExample = async (str: string): Promise<UserDoc> => {
   const event = User.build({
     nick_name: `user${str}`,
     email: `test${str}@gmail.com`,
@@ -20,7 +20,7 @@ export const registerExample = async (str: string) => {
   return event;
 };
 
-export const logInExample = async (user: UserDoc) => {
+export const logInExample = async (user: UserDoc): Promise<string> => {
   const { nick_name } = user;
 
   const res = await request(app)
