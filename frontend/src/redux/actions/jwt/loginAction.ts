@@ -1,4 +1,4 @@
-import { store } from "../store";
+import { store } from "../../store";
 
 export interface LoginData {
   nick_name: string;
@@ -27,5 +27,11 @@ export const login = async ({
   if (res.status === 200) {
     store.dispatch({ type: "LOGIN", payload: resBody.jwt_token });
     store.dispatch({ type: "SET_ROUTE", payload: "/" });
+  }
+  if (res.status === 403) {
+    store.dispatch({
+      type: "ADD_MESSAGE",
+      payload: { severity: "error", desciption: "Wrong email or password" },
+    });
   }
 };

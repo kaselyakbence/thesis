@@ -8,7 +8,7 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 
 import { store } from "./redux/store";
 
-import Auth from "./components/Auth/Routing";
+import Auth from "./components/auth/Routing";
 
 import "./style/app.css";
 

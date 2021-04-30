@@ -12,7 +12,9 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 
-import { login } from "../redux/actions/loginAction";
+import MessageSnackbar from "../components/info/MessageSnackbar";
+
+import { login } from "../redux/actions/jwt/loginAction";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -50,16 +52,19 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "1.75rem",
     },
     [theme.breakpoints.up("lg")]: {
-      fontSize: "2rem",
+      fontSize: "1.2rem",
     },
   },
 }));
 
 const loginValidationSchema = yup.object({
-  nick_name: yup.string().required("Username is required"),
+  nick_name: yup
+    .string()
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed")
+    .required("Username is required"),
   password: yup
     .string()
-    .min(8, "Password should be of minimum 4 characters length")
+    .min(4, "Password should be of minimum 4 characters length")
     .required("Password is required"),
 });
 
@@ -72,62 +77,71 @@ const Login: FC = () => {
       password: "",
     },
     validationSchema: loginValidationSchema,
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting, setValues, resetForm }) => {
       login(values);
+
       setSubmitting(false);
+      setValues({
+        nick_name: "",
+        password: "",
+      });
+      resetForm();
     },
   });
 
   return (
-    <Container className={classes.container}>
-      <form onSubmit={formik.handleSubmit} className={classes.form}>
-        <TextField
-          fullWidth
-          id="nick_name"
-          name="nick_name"
-          label="Username"
-          className={classes.fields}
-          inputProps={{ className: classes.inputs }}
-          value={formik.values.nick_name}
-          onChange={formik.handleChange}
-          error={formik.touched.nick_name && Boolean(formik.errors.nick_name)}
-          helperText={formik.touched.nick_name && formik.errors.nick_name}
-        />
-        <TextField
-          fullWidth
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          className={classes.fields}
-          inputProps={{ className: classes.inputs }}
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-        <Button
-          color="primary"
-          className={clsx(classes.submit, classes.inputs)}
-          variant="contained"
-          fullWidth
-          type="submit"
-        >
-          Submit
-        </Button>
-        <p className={classes.fields}>- or -</p>
-        <Link to="/register" className={classes.link}>
+    <>
+      <Container className={classes.container}>
+        <form onSubmit={formik.handleSubmit} className={classes.form}>
+          <TextField
+            fullWidth
+            id="nick_name"
+            name="nick_name"
+            label="Username"
+            className={classes.fields}
+            inputProps={{ className: classes.inputs }}
+            value={formik.values.nick_name}
+            onChange={formik.handleChange}
+            error={formik.touched.nick_name && Boolean(formik.errors.nick_name)}
+            helperText={formik.touched.nick_name && formik.errors.nick_name}
+          />
+          <TextField
+            fullWidth
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            className={classes.fields}
+            inputProps={{ className: classes.inputs }}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
           <Button
-            color="secondary"
-            className={clsx(classes.fields, classes.inputs)}
+            color="primary"
+            className={clsx(classes.submit, classes.inputs)}
             variant="contained"
             fullWidth
+            type="submit"
           >
-            Register
+            Submit
           </Button>
-        </Link>
-      </form>
-    </Container>
+          <p className={classes.fields}>- or -</p>
+          <Link to="/register" className={classes.link}>
+            <Button
+              color="secondary"
+              className={clsx(classes.fields, classes.inputs)}
+              variant="contained"
+              fullWidth
+            >
+              Register
+            </Button>
+          </Link>
+        </form>
+      </Container>
+      <MessageSnackbar />
+    </>
   );
 };
 
