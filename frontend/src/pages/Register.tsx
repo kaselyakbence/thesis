@@ -14,8 +14,6 @@ import Container from "@material-ui/core/Container";
 
 import MessageSnackbar from "../components/info/MessageSnackbar";
 
-import { login } from "../redux/actions/jwt/loginAction";
-
 const useStyles = makeStyles((theme) => ({
   container: {
     width: "80vw",
@@ -29,11 +27,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: "40%",
+    marginTop: "5%",
     fontSize: "1.2rem",
 
     [theme.breakpoints.up("md")]: {
-      marginTop: "10%",
+      marginTop: "0",
       width: "40%",
     },
   },
@@ -57,31 +55,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const loginValidationSchema = yup.object({
+const registerValidationSchema = yup.object({
   nick_name: yup.string().required("Username is required"),
+  email: yup
+    .string()
+    .email("The email must be valid")
+    .required("Email is required"),
+  first_name: yup
+    .string()
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed"),
+  ast_name: yup
+    .string()
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed"),
   password: yup
     .string()
     .min(4, "Password should be of minimum 4 characters length")
     .required("Password is required"),
+  password2: yup
+    .string()
+    .min(4, "Password should be of minimum 4 characters length")
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required("Password is required"),
 });
 
-const Login: FC = () => {
+const Register: FC = () => {
   const classes = useStyles();
 
   const formik = useFormik({
     initialValues: {
       nick_name: "",
+      email: "",
+      first_name: "",
+      last_name: "",
       password: "",
+      password2: "",
     },
-    validationSchema: loginValidationSchema,
-    onSubmit: async (values, { setSubmitting, setValues, resetForm }) => {
-      login(values);
-
-      setSubmitting(false);
-      setValues({
-        nick_name: "",
-        password: "",
-      });
+    validationSchema: registerValidationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      console.log(values);
       resetForm();
     },
   });
@@ -94,7 +105,7 @@ const Login: FC = () => {
             fullWidth
             id="nick_name"
             name="nick_name"
-            label="Username"
+            label="Username*"
             className={classes.fields}
             inputProps={{ className: classes.inputs }}
             value={formik.values.nick_name}
@@ -104,9 +115,48 @@ const Login: FC = () => {
           />
           <TextField
             fullWidth
+            id="email"
+            name="email"
+            label="Email*"
+            className={classes.fields}
+            inputProps={{ className: classes.inputs }}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+          <TextField
+            fullWidth
+            id="first_name"
+            name="first_name"
+            label="First name"
+            className={classes.fields}
+            inputProps={{ className: classes.inputs }}
+            value={formik.values.first_name}
+            onChange={formik.handleChange}
+            error={
+              formik.touched.first_name && Boolean(formik.errors.first_name)
+            }
+            helperText={formik.touched.first_name && formik.errors.first_name}
+          />
+          <TextField
+            fullWidth
+            id="last_name"
+            name="last_name"
+            label="Last name"
+            className={classes.fields}
+            inputProps={{ className: classes.inputs }}
+            value={formik.values.last_name}
+            onChange={formik.handleChange}
+            error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+            helperText={formik.touched.last_name && formik.errors.last_name}
+          />
+
+          <TextField
+            fullWidth
             id="password"
             name="password"
-            label="Password"
+            label="Password*"
             type="password"
             className={classes.fields}
             inputProps={{ className: classes.inputs }}
@@ -115,24 +165,37 @@ const Login: FC = () => {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
+          <TextField
+            fullWidth
+            id="password2"
+            name="password2"
+            label="Password again*"
+            type="password"
+            className={classes.fields}
+            inputProps={{ className: classes.inputs }}
+            value={formik.values.password2}
+            onChange={formik.handleChange}
+            error={formik.touched.password2 && Boolean(formik.errors.password2)}
+            helperText={formik.touched.password2 && formik.errors.password2}
+          />
           <Button
-            color="primary"
+            color="secondary"
             className={clsx(classes.submit, classes.inputs)}
             variant="contained"
             fullWidth
             type="submit"
           >
-            Login
+            Register
           </Button>
           <p className={classes.fields}>- or -</p>
-          <Link to="/register" className={classes.link}>
+          <Link to="/login" className={classes.link}>
             <Button
-              color="secondary"
+              color="primary"
               className={clsx(classes.fields, classes.inputs)}
               variant="contained"
               fullWidth
             >
-              Register
+              Login
             </Button>
           </Link>
         </form>
@@ -142,4 +205,4 @@ const Login: FC = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -39,12 +39,11 @@ router.post(
       password2,
       first_name,
       last_name,
-      dob,
       is_public,
     } = req.body;
 
-    const isEmailUnique = await User.findOne({ email });
-    const isNickUnique = await User.findOne({ nick_name });
+    const isEmailUnique = await User.findOne({ email }).exec();
+    const isNickUnique = await User.findOne({ nick_name }).exec();
 
     if (isEmailUnique) {
       throw new BadRequestError("Email is not unique");
@@ -64,7 +63,6 @@ router.post(
       password,
       first_name,
       last_name,
-      dob,
       is_public,
     });
     await user.save();
