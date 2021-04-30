@@ -58,10 +58,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const loginValidationSchema = yup.object({
-  nick_name: yup
-    .string()
-    .matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed")
-    .required("Username is required"),
+  nick_name: yup.string().required("Username is required"),
   password: yup
     .string()
     .min(4, "Password should be of minimum 4 characters length")
@@ -125,7 +122,7 @@ const Login: FC = () => {
             fullWidth
             type="submit"
           >
-            Submit
+            Login
           </Button>
           <p className={classes.fields}>- or -</p>
           <Link to="/register" className={classes.link}>

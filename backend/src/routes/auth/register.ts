@@ -9,7 +9,7 @@ import { User } from "../../models/User";
 import { validateRequest } from "../../middlewares/validate-request";
 
 //Errors
-import { BadRequestError } from "../../errors/bad-request-error";
+import { UnprocessableError } from "../../errors/unprocessable-error";
 
 const router = express.Router();
 
@@ -39,23 +39,31 @@ router.post(
       password2,
       first_name,
       last_name,
-      dob,
       is_public,
     } = req.body;
 
-    const isEmailUnique = await User.findOne({ email });
-    const isNickUnique = await User.findOne({ nick_name });
+    const isEmailUnique = await User.findOne({ email }).exec();
+    const isNickUnique = await User.findOne({ nick_name }).exec();
+
+    const errors: {
+      field: string;
+      message: string;
+    }[] = [];
 
     if (isEmailUnique) {
-      throw new BadRequestError("Email is not unique");
+      errors.push({ field: "email", message: "Email must be unique" });
     }
 
     if (isNickUnique) {
-      throw new BadRequestError("Nickname is not unique");
+      errors.push({ field: "nick_name", message: "Username must be unique" });
     }
 
     if (password !== password2) {
-      throw new BadRequestError("Passwords are not matching");
+      errors.push({ field: "password", message: "Passwords aren't matching" });
+    }
+
+    if (errors.length > 0) {
+      throw new UnprocessableError(errors);
     }
 
     const user = User.build({
@@ -64,7 +72,6 @@ router.post(
       password,
       first_name,
       last_name,
-      dob,
       is_public,
     });
     await user.save();

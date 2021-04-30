@@ -10,7 +10,6 @@ interface UserAttrs {
   nick_name: string;
   first_name?: string;
   last_name?: string;
-  dob?: Date;
   password: string;
   is_public?: boolean;
 }
@@ -29,7 +28,6 @@ export interface UserDoc extends mongoose.Document {
   nick_name: string;
   first_name?: string;
   last_name?: string;
-  dob?: Date;
   password: string;
   friends?: [{ type: mongoose.Types.ObjectId; ref: "user" }];
   rooms?: [
@@ -58,7 +56,6 @@ export interface UserDoc extends mongoose.Document {
         email: string;
         first_name?: string;
         last_name?: string;
-        dob?: Date;
       }
     | { nick_name: string; isPublic: boolean }
   >;
@@ -82,9 +79,6 @@ const userSchema = new mongoose.Schema(
     },
     last_name: {
       type: String,
-    },
-    dob: {
-      type: Date,
     },
     password: {
       type: String,
@@ -163,7 +157,6 @@ userSchema.methods.visit = async function () {
       email: this.get("email"),
       first_name: this.get("first_name"),
       last_name: this.get("last_name"),
-      dob: this.get("dob"),
     };
   } else {
     return {

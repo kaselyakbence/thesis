@@ -16,7 +16,7 @@ export const messageReducer = (
     case "ADD_MESSAGE":
       return [...state, action.payload];
     case "POP_MESSAGE":
-      state.pop();
+      state.shift();
       return [...state];
     default:
       return [...state];
