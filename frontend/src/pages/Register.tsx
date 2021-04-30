@@ -14,6 +14,8 @@ import Container from "@material-ui/core/Container";
 
 import MessageSnackbar from "../components/info/MessageSnackbar";
 
+import { register } from "../redux/actions/jwt/registerAction";
+
 const useStyles = makeStyles((theme) => ({
   container: {
     width: "80vw",
@@ -91,9 +93,9 @@ const Register: FC = () => {
       password2: "",
     },
     validationSchema: registerValidationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      console.log(values);
-      resetForm();
+    onSubmit: async (values, { setErrors }) => {
+      const error = await register(values);
+      setErrors(error);
     },
   });
 

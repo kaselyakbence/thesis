@@ -34,4 +34,10 @@ export const login = async ({
       payload: { severity: "error", desciption: "Wrong email or password" },
     });
   }
+  if (res.status === 500) {
+    store.dispatch({
+      type: "ADD_MESSAGE",
+      payload: { severity: "error", desciption: "Something went wrong" },
+    });
+  }
 };
