@@ -1,3 +1,4 @@
+import { push } from "connected-react-router";
 import { store } from "../../store";
 
 export interface RegisterData {
@@ -61,7 +62,14 @@ export const register = async ({
   }
 
   if (res.status === 201) {
-    store.dispatch({ type: "SET_ROUTE", payload: "/login" });
+    store.dispatch(push("/login"));
+    store.dispatch({
+      type: "ADD_MESSAGE",
+      payload: {
+        severity: "success",
+        desciption: "Successfully registered. Please log in!",
+      },
+    });
   }
 
   return {};

@@ -2,13 +2,14 @@ import { FC } from "react";
 
 import { Provider as ReduxProvider } from "react-redux";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { ConnectedRouter } from "connected-react-router";
+import { ProtectedRoute } from "./components/auth/PrivateRoute";
+
+import { Switch, Route } from "react-router-dom";
 
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 
-import { store } from "./redux/store";
-
-import Auth from "./components/auth/Routing";
+import { store, history } from "./redux/store";
 
 import "./style/app.css";
 
@@ -23,8 +24,7 @@ const App: FC = () => {
     <div id="app">
       <ReduxProvider store={store}>
         <ThemeProvider theme={theme}>
-          <Router>
-            <Auth />
+          <ConnectedRouter history={history}>
             <Switch>
               <Route path="/login">
                 <Login />
@@ -32,11 +32,11 @@ const App: FC = () => {
               <Route path="/register">
                 <Register />
               </Route>
-              <Route path="/">
-                <p>Home</p>
-              </Route>
+              <ProtectedRoute path="/">
+                <p>page</p>
+              </ProtectedRoute>
             </Switch>
-          </Router>
+          </ConnectedRouter>
         </ThemeProvider>
       </ReduxProvider>
     </div>

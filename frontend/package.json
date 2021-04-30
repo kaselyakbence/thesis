@@ -17,6 +17,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.16",
     "clsx": "^1.1.1",
+    "connected-react-router": "^6.9.1",
     "formik": "^2.2.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -46,6 +47,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "lint": "eslint src/**/*.ts",
+    "format": "eslint src/**/*.ts --fix",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

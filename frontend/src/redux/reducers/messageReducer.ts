@@ -1,4 +1,4 @@
-interface Message {
+export interface Message {
   severity: "error" | "warning" | "info" | "success";
   desciption: string;
 }

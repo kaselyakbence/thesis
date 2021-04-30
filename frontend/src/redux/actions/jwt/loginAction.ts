@@ -1,4 +1,5 @@
 import { store } from "../../store";
+import { push } from "connected-react-router";
 
 export interface LoginData {
   nick_name: string;
@@ -26,7 +27,7 @@ export const login = async ({
 
   if (res.status === 200) {
     store.dispatch({ type: "LOGIN", payload: resBody.jwt_token });
-    store.dispatch({ type: "SET_ROUTE", payload: "/" });
+    store.dispatch(push("/"));
   }
   if (res.status === 403) {
     store.dispatch({
