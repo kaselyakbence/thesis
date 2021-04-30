@@ -19,13 +19,17 @@ import { NotFoundError } from "./errors/not-found-error";
 //Error handler
 import { errorHandler } from "./middlewares/error-handler";
 
+import cors from "cors";
+
 const app = express();
 
 //Parse body to json
 app.use(express.json());
 
+app.use(cors());
+
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).send("1.0.5");
+  res.status(400).send({ version: "1.0.5" });
 });
 
 app.use("/auth", authRouter);

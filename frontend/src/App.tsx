@@ -8,6 +8,11 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 
 import { store } from "./redux/store";
 
+import Auth from "./components/Auth/Routing";
+
+//Pages
+import Login from "./pages/Login";
+
 const theme = createMuiTheme();
 
 const App: FC = () => {
@@ -15,7 +20,11 @@ const App: FC = () => {
     <ReduxProvider store={store}>
       <ThemeProvider theme={theme}>
         <Router>
+          <Auth />
           <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
             <Route path="/">
               <p>Home</p>
             </Route>
