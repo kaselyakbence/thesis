@@ -6,10 +6,7 @@ export interface LoginData {
   password: string;
 }
 
-export const login = async ({
-  nick_name,
-  password,
-}: LoginData): Promise<void> => {
+export const login = async ({ nick_name, password }: LoginData): Promise<void> => {
   const body = {
     nick_name,
     password,

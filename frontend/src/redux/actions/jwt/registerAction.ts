@@ -52,13 +52,11 @@ export const register = async ({
   const resBody = await res.json();
 
   if (res.status === 422) {
-    return resBody.map(
-      ({ field, message }: { field: string; message: string }) => {
-        const error: any = {};
-        error[field] = message;
-        return error;
-      }
-    );
+    return resBody.map(({ field, message }: { field: string; message: string }) => {
+      const error: any = {};
+      error[field] = message;
+      return error;
+    });
   }
 
   if (res.status === 201) {

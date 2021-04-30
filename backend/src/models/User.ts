@@ -177,9 +177,7 @@ userSchema.methods.addFriend = async function (uid: string) {
 };
 
 userSchema.methods.getFriends = function () {
-  return User.findOne({ _id: this.id }, { friends: 1 })
-    .populate("friends", "nick_name")
-    .exec();
+  return User.findOne({ _id: this.id }, { friends: 1 }).populate("friends", "nick_name").exec();
 };
 
 userSchema.methods.getRequests = function () {

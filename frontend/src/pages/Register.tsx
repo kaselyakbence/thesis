@@ -59,16 +59,9 @@ const useStyles = makeStyles((theme) => ({
 
 const registerValidationSchema = yup.object({
   nick_name: yup.string().required("Username is required"),
-  email: yup
-    .string()
-    .email("The email must be valid")
-    .required("Email is required"),
-  first_name: yup
-    .string()
-    .matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed"),
-  ast_name: yup
-    .string()
-    .matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed"),
+  email: yup.string().email("The email must be valid").required("Email is required"),
+  first_name: yup.string().matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed"),
+  ast_name: yup.string().matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed"),
   password: yup
     .string()
     .min(4, "Password should be of minimum 4 characters length")
@@ -136,9 +129,7 @@ const Register: FC = () => {
             inputProps={{ className: classes.inputs }}
             value={formik.values.first_name}
             onChange={formik.handleChange}
-            error={
-              formik.touched.first_name && Boolean(formik.errors.first_name)
-            }
+            error={formik.touched.first_name && Boolean(formik.errors.first_name)}
             helperText={formik.touched.first_name && formik.errors.first_name}
           />
           <TextField

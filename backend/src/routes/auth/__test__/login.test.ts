@@ -35,8 +35,5 @@ it("Incorrect nickname", async () => {
 it("Incorrect password", async () => {
   await registerExample("");
 
-  return request(app)
-    .post("/auth/login")
-    .send({ nick_name: "user", password: "pwd" })
-    .expect(403);
+  return request(app).post("/auth/login").send({ nick_name: "user", password: "pwd" }).expect(403);
 });

@@ -16,31 +16,24 @@ import { UnauthorizedError } from "../../errors/unauthorized-error";
 
 const router = express.Router();
 
-router.post(
-  "/:nick_name/addfriend",
-  authorize,
-  async (req: Request, res: Response) => {
-    const { nick_name } = req.params;
+router.post("/:nick_name/addfriend", authorize, async (req: Request, res: Response) => {
+  const { nick_name } = req.params;
 
-    const user = await User.findOne({ nick_name }).exec();
+  const user = await User.findOne({ nick_name }).exec();
 
-    if (!req.currentUser) throw new UnauthorizedError();
+  if (!req.currentUser) throw new UnauthorizedError();
 
-    if (!user) throw new BadRequestError("User not found");
+  if (!user) throw new BadRequestError("User not found");
 
-    try {
-      const event = Event.buildFriendRequest(
-        new Types.ObjectId(req.currentUser?.id),
-        user.id
-      );
+  try {
+    const event = Event.buildFriendRequest(new Types.ObjectId(req.currentUser?.id), user.id);
 
-      event.save();
+    event.save();
 
-      res.status(201).send({ msg: "Created" });
-    } catch (e) {
-      throw new BadRequestError("Request was not sent");
-    }
+    res.status(201).send({ msg: "Created" });
+  } catch (e) {
+    throw new BadRequestError("Request was not sent");
   }
-);
+});
 
 export { router as addFriendRouter };
