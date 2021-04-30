@@ -92,7 +92,7 @@ it("Returns error if nick_name or email not unique", async () => {
       password: "password",
       password2: "password",
     })
-    .expect(400);
+    .expect(422);
 
   return request(app)
     .post("/auth/register")
@@ -102,5 +102,5 @@ it("Returns error if nick_name or email not unique", async () => {
       password: "password",
       password2: "password",
     })
-    .expect(400);
+    .expect(422);
 });

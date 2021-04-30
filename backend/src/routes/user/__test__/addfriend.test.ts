@@ -6,10 +6,7 @@ import { registerExample, logInExample } from "../../../test/helpers";
 it("Unauthorized login", async () => {
   const user = await registerExample("");
 
-  return request(app)
-    .post(`/users/${user.nick_name}/addfriend`)
-    .send()
-    .expect(401);
+  return request(app).post(`/users/${user.nick_name}/addfriend`).send().expect(401);
 });
 
 it("Request successfully sent", async () => {

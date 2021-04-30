@@ -19,10 +19,7 @@ interface EventAttrs {
 //Interface for EventModel
 interface EventModel extends mongoose.Model<any> {
   build(attrs: EventAttrs): EventDoc;
-  buildFriendRequest(
-    owner: mongoose.Types.ObjectId,
-    friend: mongoose.Types.ObjectId
-  ): EventDoc;
+  buildFriendRequest(owner: mongoose.Types.ObjectId, friend: mongoose.Types.ObjectId): EventDoc;
   buildParticipationRequest(
     roomId: mongoose.Types.ObjectId,
     from: mongoose.Types.ObjectId,

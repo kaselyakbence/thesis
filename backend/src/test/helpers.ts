@@ -23,9 +23,7 @@ export const registerExample = async (str: string): Promise<UserDoc> => {
 export const logInExample = async (user: UserDoc): Promise<string> => {
   const { nick_name } = user;
 
-  const res = await request(app)
-    .post("/auth/login")
-    .send({ nick_name, password: testpw });
+  const res = await request(app).post("/auth/login").send({ nick_name, password: testpw });
 
   return res.body.jwt_token;
 };
