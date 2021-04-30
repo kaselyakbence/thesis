@@ -13,6 +13,9 @@ import { store, history } from "./redux/store";
 
 import "./style/app.css";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 //Pages
 import Login from "./pages/Login";
 import Register from "./pages/Register";

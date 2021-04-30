@@ -40,4 +40,6 @@ jobs:
         working-directory: frontend
         run: |
           npm i
+          touch .env
+          echo API_URL=https://thesis.kaselyakbence.me/api >> .env
           npm run build

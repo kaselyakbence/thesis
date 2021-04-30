@@ -12,7 +12,7 @@ export const login = async ({ nick_name, password }: LoginData): Promise<void> =
     password,
   };
 
-  const res = await fetch("http://localhost:11111/auth/login", {
+  const res = await fetch(`${process.env.API_URL ?? "http://localhost:11111"}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
