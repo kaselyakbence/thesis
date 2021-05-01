@@ -1,7 +1,8 @@
-/*export interface UserData {
- 
+export interface UserData {
+  frinds: string[];
 }
 
+/*
 const initialState: Message[] = [];
 
 type Add = { type: "ADD_MESSAGE"; payload: Message };

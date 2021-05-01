@@ -10,11 +10,14 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 import MenuIcon from "@material-ui/icons/Menu";
-
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 //import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
+
+import { logout } from "../../redux/actions/jwt/logoutAction";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
+    },
+    logout: {
+      marginRight: "10px",
     },
   })
 );
@@ -80,6 +86,12 @@ const Menu: FC = () => {
             <ListItemText primary={"Profile"} />
           </ListItem>
           <Divider />
+          <ListItem onClick={logout}>
+            <ListItemText primary={"Logout"} className={classes.logout} />
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+          </ListItem>
         </List>
       </SwipeableDrawer>
     </>
