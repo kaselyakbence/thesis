@@ -28,7 +28,7 @@ jobs:
           DB_CONNECTION: ${{secrets.DB_CONNECTION}}
           JWT_KEY: ${{secrets.JWT_KEY}}
         run: |
-          npm i
+          npm ci
           npm run build
           touch .env
           echo $DB_CONNECTION >> .env
@@ -39,7 +39,7 @@ jobs:
       - name: Setup and Build Frontend App
         working-directory: frontend
         run: |
-          npm i
+          npm ci
           touch .env
           echo API_URL=https://thesis.kaselyakbence.me/api >> .env
           npm run build
