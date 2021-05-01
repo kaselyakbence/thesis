@@ -42,5 +42,4 @@ jobs:
           npm ci
           touch .env
           echo API_URL=https://thesis.kaselyakbence.me/api >> .env
-          echo GENERATE_SOURCEMAP=false >> .env
-          npm run build
+          echo GENERATE_SOURCEMAP=false >> .env  

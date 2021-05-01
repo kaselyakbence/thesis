@@ -2,10 +2,12 @@ import { app } from "./app";
 import { connect } from "./db/connectToDB";
 
 import { User } from "./models/User";
+
 /*
 import { Room } from "./models/Room";
 import { Event } from "./models/Event";
 */
+
 const port = 11111;
 
 //Run app
@@ -20,6 +22,18 @@ app.listen(port, async () => {
     password: "password",
   });
   await user.save();
+  /*
+  const user2 = User.build({
+    email: "test2@test.com",
+    nick_name: "user2",
+    password: "password",
+  });
+
+ 
+  await user2.save();
+
+  const event = Event.buildFriendRequest(user2.id, user.id);
+  event.save();*/
 
   console.log(`App listening at http://localhost:${port}`);
 });

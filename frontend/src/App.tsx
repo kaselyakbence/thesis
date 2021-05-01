@@ -13,12 +13,13 @@ import { store, history } from "./redux/store";
 
 import "./style/app.css";
 
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 dotenv.config();
 
 //Pages
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Home from "./pages/Home";
 
 const theme = createMuiTheme();
 
@@ -36,7 +37,7 @@ const App: FC = () => {
                 <Register />
               </Route>
               <ProtectedRoute path="/">
-                <p>page</p>
+                <Home />
               </ProtectedRoute>
             </Switch>
           </ConnectedRouter>

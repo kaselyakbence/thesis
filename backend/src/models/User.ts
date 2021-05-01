@@ -180,11 +180,16 @@ userSchema.methods.getFriends = function () {
   return User.findOne({ _id: this.id }, { friends: 1 }).populate("friends", "nick_name").exec();
 };
 
-userSchema.methods.getRequests = function () {
+userSchema.methods.getRequests = async function () {
   return User.findById(this.id, "events")
     .populate({
       path: "events",
       select: ["pubId", "owner", "from", "type"],
+      populate: {
+        path: "from",
+        model: "user",
+        select: "nick_name",
+      },
     })
     .exec();
 };

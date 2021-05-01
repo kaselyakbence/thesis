@@ -23,7 +23,8 @@ interface EventModel extends mongoose.Model<any> {
   buildParticipationRequest(
     roomId: mongoose.Types.ObjectId,
     from: mongoose.Types.ObjectId,
-    to: mongoose.Types.ObjectId
+    to: mongoose.Types.ObjectId,
+    roomPubId: string
   ): EventDoc;
   accept(): Promise<any>;
   reject(): Promise<any>;
@@ -119,13 +120,15 @@ eventSchema.statics.buildFriendRequest = (
 eventSchema.statics.buildParticipationRequest = (
   roomId: mongoose.Types.ObjectId,
   from: mongoose.Types.ObjectId,
-  to: mongoose.Types.ObjectId
+  to: mongoose.Types.ObjectId,
+  roomPubId: string
 ) => {
   return Event.build({
     type: "PARTICIPATION_REQUEST",
     owner: roomId,
     from,
     to,
+    payload: roomPubId,
   });
 };
 
