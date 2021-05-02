@@ -4,6 +4,13 @@ import { Password } from "../utils/password";
 
 import { EventType } from "./Event";
 
+interface UserEvent {
+  pubId: string;
+  type: string;
+  from: string;
+  payload?: string;
+}
+
 //Interface for User
 interface UserAttrs {
   email: string;
@@ -45,7 +52,8 @@ export interface UserDoc extends mongoose.Document {
       ref: "room";
     }
   ];
-  dues?: [any];
+  events: UserEvent[];
+  dues?: any[];
   is_public: boolean;
   addFriend(nick_name: string): Promise<UserModel>;
   getFriends(): Promise<{ friends: { nick_name: string }[] }>;
@@ -101,8 +109,18 @@ const userSchema = new mongoose.Schema(
     ],
     events: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: "event",
+        pubId: {
+          type: String,
+          require: true,
+        },
+        type: {
+          type: String,
+          require: true,
+        },
+        from: {
+          type: String,
+          require: true,
+        },
       },
     ],
     rooms: [
@@ -190,17 +208,7 @@ userSchema.methods.getFriends = function () {
 };
 
 userSchema.methods.getRequests = async function () {
-  return User.findById(this.id, "events")
-    .populate({
-      path: "events",
-      select: ["pubId", "owner", "from", "type"],
-      populate: {
-        path: "from",
-        model: "user",
-        select: "nick_name",
-      },
-    })
-    .exec();
+  return User.findById(this.id, "events").exec();
 };
 
 const User = mongoose.model<UserDoc, UserModel>("user", userSchema);

@@ -31,7 +31,7 @@ interface EventModel extends mongoose.Model<any> {
 }
 
 //Interface for the properties of Event Document
-interface EventDoc extends mongoose.Document {
+export interface EventDoc extends mongoose.Document {
   pubId: string;
   type: string;
   owner: string;
@@ -54,6 +54,7 @@ const eventSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+    //The etity that produced the event
     owner: {
       type: mongoose.Types.ObjectId,
       require: true,
@@ -61,10 +62,12 @@ const eventSchema = new mongoose.Schema(
     payload: {
       type: String,
     },
+    //The user the event was produced by
     from: {
       type: mongoose.Types.ObjectId,
       ref: "user",
     },
+    //The user targeted accept or decline required
     to: {
       type: mongoose.Types.ObjectId,
       ref: "user",
@@ -91,9 +94,17 @@ const eventSchema = new mongoose.Schema(
 );
 
 eventSchema.pre("save", async function (done) {
+  console.log((await User.findById(this.get("from")).select("nick_name").exec()).nick_name);
+
   if (this.isNew) {
     await User.findByIdAndUpdate(this.get("to"), {
-      $push: { events: this.id },
+      $push: {
+        events: {
+          pubId: this.get("pubId"),
+          type: this.get("type"),
+          from: (await User.findById(this.get("from")).select("nick_name").exec()).nick_name,
+        },
+      },
     }).exec();
   }
   done();
@@ -101,7 +112,13 @@ eventSchema.pre("save", async function (done) {
 
 eventSchema.pre("remove", async function (done) {
   await User.findByIdAndUpdate(this.get("to"), {
-    $pull: { events: this.id },
+    $pull: {
+      events: {
+        pubId: this.get("pubId"),
+        type: this.get("type"),
+        from: (await User.findById(this.get("from")).select("nick_name").exec()).nick_name,
+      },
+    },
   }).exec();
   done();
 });
