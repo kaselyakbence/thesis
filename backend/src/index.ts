@@ -22,7 +22,28 @@ app.listen(port, async () => {
     password: "password",
   });
   await user.save();
+
+  const user2 = User.build({
+    email: "test2@test.com",
+    nick_name: "user2",
+    password: "password",
+  });
+  await user2.save();
   /*
+  const user3 = User.build({
+    email: "test3@test.com",
+    nick_name: "user3",
+    password: "password",
+  });
+  await user3.save();
+
+  const user4 = User.build({
+    email: "test4@test.com",
+    nick_name: "user4",
+    password: "password",
+  });
+  await user4.save();
+  
   const user2 = User.build({
     email: "test2@test.com",
     nick_name: "user2",

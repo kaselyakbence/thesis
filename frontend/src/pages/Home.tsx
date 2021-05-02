@@ -13,7 +13,7 @@ const useStyles = makeStyles(() =>
 
 //Subcomponents
 import Fab from "./home/Fab";
-import Menu from "./home/Menu";
+import Menu from "../components/display/Menu";
 
 const Home: FC = () => {
   const classes = useStyles();

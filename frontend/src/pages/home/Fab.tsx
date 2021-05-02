@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
+import Modal from "@material-ui/core/Modal";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
+
+import AddFriendsModal from "./modals/AddFriendsModal";
 
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import CloseIcon from "@material-ui/icons/Close";
@@ -26,39 +29,44 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const actions = [{ icon: <ContactsIcon />, name: "Friends" }];
-
 export default function OpenIconSpeedDial(): JSX.Element {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  const [friendModalOpen, setFriendModalOpen] = useState(false);
 
-  const handleClose = () => {
+  const handleFabClick = (openModal: Dispatch<SetStateAction<boolean>>) => {
     setOpen(false);
+    openModal(true);
   };
 
   return (
-    <div className={classes.root}>
-      <SpeedDial
-        ariaLabel="SpeedDial openIcon example"
-        className={classes.speedDial}
-        icon={<SpeedDialIcon openIcon={<CloseIcon />} />}
-        onClose={handleClose}
-        onOpen={handleOpen}
-        open={open}
-      >
-        {actions.map((action) => (
+    <>
+      <div className={classes.root}>
+        <SpeedDial
+          ariaLabel="SpeedDial openIcon example"
+          className={classes.speedDial}
+          icon={<SpeedDialIcon openIcon={<CloseIcon />} />}
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+        >
           <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            onClick={handleClose}
+            key="Friends"
+            icon={<ContactsIcon />}
+            tooltipTitle="Friends"
+            onClick={() => handleFabClick(setFriendModalOpen)}
           />
-        ))}
-      </SpeedDial>
-    </div>
+        </SpeedDial>
+      </div>
+      <Modal
+        open={friendModalOpen}
+        onClose={() => setFriendModalOpen(false)}
+        aria-labelledby="Friends"
+        aria-describedby="Add friends modal"
+      >
+        <AddFriendsModal onClose={() => setFriendModalOpen(false)} />
+      </Modal>
+    </>
   );
 }

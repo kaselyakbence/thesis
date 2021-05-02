@@ -41,5 +41,5 @@ jobs:
         run: |
           npm ci
           touch .env
-          echo API_URL=https://thesis.kaselyakbence.me/api >> .env
+          echo REACT_APP_API_URL=https://thesis.kaselyakbence.me/api >> .env
           echo GENERATE_SOURCEMAP=false >> .env  

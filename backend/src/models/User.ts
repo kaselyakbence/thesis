@@ -19,7 +19,16 @@ interface UserModel extends mongoose.Model<any> {
   build(attrs: UserAttrs): UserDoc;
   addFriend(nick_name: string): Promise<UserModel>;
   getFriends(): Promise<UserModel>;
-  getRequests(): Promise<any[]>;
+  getRequests(): Promise<{
+    events: [
+      {
+        pubId: string;
+        type: EventType;
+        from: mongoose.Types.ObjectId;
+        payload?: string;
+      }
+    ];
+  }>;
 }
 
 //Interface for the properties of User Document
@@ -45,8 +54,8 @@ export interface UserDoc extends mongoose.Document {
       {
         pubId: string;
         type: EventType;
-        owner: mongoose.Types.ObjectId;
         from: mongoose.Types.ObjectId;
+        payload?: string;
       }
     ];
   }>;
