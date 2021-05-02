@@ -31,7 +31,7 @@ interface UserModel extends mongoose.Model<any> {
       {
         pubId: string;
         type: EventType;
-        from: mongoose.Types.ObjectId;
+        from: string;
         payload?: string;
       }
     ];
