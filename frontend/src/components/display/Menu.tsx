@@ -1,4 +1,7 @@
-import { FC, useState, SyntheticEvent } from "react";
+import { FC, useState, useEffect, SyntheticEvent } from "react";
+
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
@@ -11,13 +14,14 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import Badge from "@material-ui/core/Badge";
 
 import MenuIcon from "@material-ui/icons/Menu";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-//import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
 
 import { logout } from "../../redux/actions/jwt/logoutAction";
+import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,7 +45,15 @@ const useStyles = makeStyles((theme: Theme) =>
 const Menu: FC = () => {
   const classes = useStyles();
 
+  const notificattionsNum = useSelector<RootState>(
+    (state) => state.profile.notifications.length
+  ) as number;
+
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    loadNotifications();
+  }, []);
 
   const toggleDrawer = (event: SyntheticEvent<any, Event>, isOpen: boolean) => {
     if (
@@ -71,7 +83,13 @@ const Menu: FC = () => {
           </IconButton>
           <div className={classes.title} />
           <IconButton edge="end" color="inherit" aria-label="menu">
-            <NotificationsIcon />
+            {notificattionsNum > 0 ? (
+              <Badge badgeContent={notificattionsNum} color="error">
+                <NotificationsIcon />
+              </Badge>
+            ) : (
+              <NotificationsIcon />
+            )}
           </IconButton>
         </Toolbar>
       </AppBar>
