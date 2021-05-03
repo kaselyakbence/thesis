@@ -3,10 +3,6 @@ import express, { Request, Response } from "express";
 //Npm package that renders express thrown errors async
 import "express-async-errors";
 
-//Config enviroment files
-import dotenv from "dotenv";
-dotenv.config();
-
 //Routers
 import { authRouter } from "./routes/auth";
 import { userRouter } from "./routes/user";
