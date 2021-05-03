@@ -8,7 +8,9 @@ const initialState: Message[] = [];
 type Add = { type: "ADD_MESSAGE"; payload: Message };
 type Pop = { type: "POP_MESSAGE" };
 
-export const messageReducer = (state: Message[] = initialState, action: Add | Pop): Message[] => {
+export type Action = Add | Pop;
+
+export const messageReducer = (state: Message[] = initialState, action: Action): Message[] => {
   switch (action.type) {
     case "ADD_MESSAGE":
       return [...state, action.payload];

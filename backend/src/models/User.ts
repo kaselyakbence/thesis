@@ -4,6 +4,13 @@ import { Password } from "../utils/password";
 
 import { EventType } from "./Event";
 
+interface UserEvent {
+  pubId: string;
+  type: string;
+  from: string;
+  payload?: string;
+}
+
 //Interface for User
 interface UserAttrs {
   email: string;
@@ -19,7 +26,16 @@ interface UserModel extends mongoose.Model<any> {
   build(attrs: UserAttrs): UserDoc;
   addFriend(nick_name: string): Promise<UserModel>;
   getFriends(): Promise<UserModel>;
-  getRequests(): Promise<any[]>;
+  getRequests(): Promise<{
+    events: [
+      {
+        pubId: string;
+        type: EventType;
+        from: mongoose.Types.ObjectId;
+        payload?: string;
+      }
+    ];
+  }>;
 }
 
 //Interface for the properties of User Document
@@ -36,7 +52,8 @@ export interface UserDoc extends mongoose.Document {
       ref: "room";
     }
   ];
-  dues?: [any];
+  events: UserEvent[];
+  dues?: any[];
   is_public: boolean;
   addFriend(nick_name: string): Promise<UserModel>;
   getFriends(): Promise<{ friends: { nick_name: string }[] }>;
@@ -45,8 +62,8 @@ export interface UserDoc extends mongoose.Document {
       {
         pubId: string;
         type: EventType;
-        owner: mongoose.Types.ObjectId;
         from: mongoose.Types.ObjectId;
+        payload?: string;
       }
     ];
   }>;
@@ -92,8 +109,18 @@ const userSchema = new mongoose.Schema(
     ],
     events: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: "event",
+        pubId: {
+          type: String,
+          require: true,
+        },
+        type: {
+          type: String,
+          require: true,
+        },
+        from: {
+          type: String,
+          require: true,
+        },
       },
     ],
     rooms: [
@@ -180,13 +207,8 @@ userSchema.methods.getFriends = function () {
   return User.findOne({ _id: this.id }, { friends: 1 }).populate("friends", "nick_name").exec();
 };
 
-userSchema.methods.getRequests = function () {
-  return User.findById(this.id, "events")
-    .populate({
-      path: "events",
-      select: ["pubId", "owner", "from", "type"],
-    })
-    .exec();
+userSchema.methods.getRequests = async function () {
+  return User.findById(this.id, "events").exec();
 };
 
 const User = mongoose.model<UserDoc, UserModel>("user", userSchema);

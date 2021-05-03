@@ -12,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 
-import MessageSnackbar from "../components/info/MessageSnackbar";
+import MessageSnackbar from "../components/display/MessageSnackbar";
 
 import { login } from "../redux/actions/jwt/loginAction";
 

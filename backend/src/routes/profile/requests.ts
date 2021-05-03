@@ -20,6 +20,7 @@ router.get("/requests", authorize, async (req: Request, res: Response) => {
 
   try {
     const userRequests = await user.getRequests();
+
     return res.send(userRequests.events);
   } catch (e) {
     return res.status(203).send([]);

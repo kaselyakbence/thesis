@@ -12,13 +12,16 @@ export const login = async ({ nick_name, password }: LoginData): Promise<void> =
     password,
   };
 
-  const res = await fetch(`${process.env.API_URL ?? "http://localhost:11111"}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  const res = await fetch(
+    `${process.env.REACT_APP_API_URL ?? "http://localhost:11111"}/auth/login`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
 
   const resBody = await res.json();
 
