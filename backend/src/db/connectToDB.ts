@@ -3,6 +3,8 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 
 const env = process.env.APP_ENV || "development";
 
+console.log("Enviroment:", env);
+
 //Function to connect to MongoDB based on enviroment
 const connect = async (): Promise<void> => {
   if (env === "production") {
