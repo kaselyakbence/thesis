@@ -4,12 +4,11 @@ dotenv.config();
 
 import { app } from "./app";
 import { connect } from "./db/connectToDB";
-/*
-import { User UserDoc } from "./models/User";
 
+import { User /*,UserDoc*/ } from "./models/User";
 
-import { Room } from "./models/Room";
-import { Event } from "./models/Event";*/
+//import { Room } from "./models/Room";
+import { Event } from "./models/Event";
 
 const port = 11111;
 
@@ -18,7 +17,6 @@ app.listen(port, async () => {
   //Connect to MongoDB database
   await connect();
 
-  /*
   //TESTING
   const user = User.build({
     email: "test@test.com",
@@ -36,7 +34,7 @@ app.listen(port, async () => {
 
   const event = Event.buildFriendRequest(user2.id, user.id);
   await event.save();
-  
+  /*
   console.log("Users:");
 
   console.log((await User.findOne({ nick_name: user.nick_name }).exec()) as UserDoc);
