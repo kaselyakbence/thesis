@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { UnauthorizedError } from "../errors/unauthorized-error";
 
 interface UserPayload {
-  id: number;
+  id: string;
   nick_name: string;
 }
 

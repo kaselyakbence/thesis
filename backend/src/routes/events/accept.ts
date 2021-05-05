@@ -20,7 +20,7 @@ router.get("/:pubId/accept", authorize, async (req: Request, res: Response) => {
 
   if (!event) throw new BadRequestError("Event not found");
 
-  if (event.to !== req.currentUser?.nick_name) throw new UnauthorizedError();
+  if (event.to?.toString() !== req.currentUser?.id) throw new UnauthorizedError();
 
   event.accept();
 

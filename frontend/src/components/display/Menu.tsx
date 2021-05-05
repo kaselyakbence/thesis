@@ -3,6 +3,8 @@ import { FC, useState, useEffect, SyntheticEvent } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
+import Modal from "@material-ui/core/Modal";
+
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 import IconButton from "@material-ui/core/IconButton";
@@ -19,6 +21,8 @@ import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+
+import EventsModal from "../modals/EventsModal";
 
 import { logout } from "../../redux/actions/jwt/logoutAction";
 import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
@@ -44,6 +48,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Menu: FC = () => {
   const classes = useStyles();
+
+  const [eventsModalOpen, setEventsModalOpen] = useState(false);
 
   const notificattionsNum = useSelector<RootState>(
     (state) => state.profile.notifications.length
@@ -82,7 +88,12 @@ const Menu: FC = () => {
             <MenuIcon />
           </IconButton>
           <div className={classes.title} />
-          <IconButton edge="end" color="inherit" aria-label="menu">
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => setEventsModalOpen(true)}
+          >
             {notificattionsNum > 0 ? (
               <Badge badgeContent={notificattionsNum} color="error">
                 <NotificationsIcon />
@@ -112,6 +123,14 @@ const Menu: FC = () => {
           </ListItem>
         </List>
       </SwipeableDrawer>
+      <Modal
+        open={eventsModalOpen}
+        onClose={() => setEventsModalOpen(false)}
+        aria-labelledby="Friends"
+        aria-describedby="Add friends modal"
+      >
+        <EventsModal onClose={() => setEventsModalOpen(false)} />
+      </Modal>
     </>
   );
 };
