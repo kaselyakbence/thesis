@@ -26,6 +26,7 @@ import EventsModal from "../modals/EventsModal";
 
 import { logout } from "../../redux/actions/jwt/logoutAction";
 import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
+import { loadFriends } from "../../redux/actions/profile/loadFriends";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,14 +52,16 @@ const Menu: FC = () => {
 
   const [eventsModalOpen, setEventsModalOpen] = useState(false);
 
-  const notificattionsNum = useSelector<RootState>(
+  const notificationsSum = useSelector<RootState>(
     (state) => state.profile.notifications.length
   ) as number;
+  const friensSum = useSelector<RootState>((state) => state.profile.friends.length) as number;
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     loadNotifications();
+    loadFriends();
   }, []);
 
   const toggleDrawer = (event: SyntheticEvent<any, Event>, isOpen: boolean) => {
@@ -94,8 +97,8 @@ const Menu: FC = () => {
             aria-label="menu"
             onClick={() => setEventsModalOpen(true)}
           >
-            {notificattionsNum > 0 ? (
-              <Badge badgeContent={notificattionsNum} color="error">
+            {notificationsSum > 0 ? (
+              <Badge badgeContent={notificationsSum} color="error">
                 <NotificationsIcon />
               </Badge>
             ) : (
@@ -115,6 +118,13 @@ const Menu: FC = () => {
             <ListItemText primary={"Profile"} />
           </ListItem>
           <Divider />
+          <ListItem>
+            <ListItemText
+              primary={"Friends"}
+              secondary={`${friensSum} friends`}
+              className={classes.logout}
+            />
+          </ListItem>
           <ListItem onClick={logout}>
             <ListItemText primary={"Logout"} className={classes.logout} />
             <ListItemIcon>

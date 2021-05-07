@@ -1,4 +1,4 @@
-type EventType = "FRIEND_REQUEST" | "PARTICIPATION_REQUEST";
+export type EventType = "FRIEND_REQUEST" | "PARTICIPATION_REQUEST";
 
 export interface Notification {
   pubId: string;

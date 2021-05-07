@@ -8,7 +8,7 @@ import { connect } from "./db/connectToDB";
 import { User /*,UserDoc*/ } from "./models/User";
 
 //import { Room } from "./models/Room";
-import { Event } from "./models/Event";
+//import { Event } from "./models/Event";
 
 const port = 11111;
 
@@ -31,15 +31,15 @@ app.listen(port, async () => {
     password: "password",
   });
   await user2.save();
-
+  /*
   const event = Event.buildFriendRequest(user2.id, user.id);
   await event.save();
-  /*
+  
   console.log("Users:");
 
   console.log((await User.findOne({ nick_name: user.nick_name }).exec()) as UserDoc);
-  console.log("Events:");
-
+  console.log("Events:"); 
+ 
   console.log(await Event.find().exec());*/
 
   console.log(`App listening at http://localhost:${port}`);
