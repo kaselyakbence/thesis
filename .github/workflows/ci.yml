@@ -30,10 +30,10 @@ jobs:
         run: |
           npm ci
           npm run build
-          touch .env
-          echo $DB_CONNECTION >> .env
-          echo APP_ENV=production >> .env
-          echo $JWT_KEY >> .env
+          touch build/.env
+          echo $DB_CONNECTION >> build/.env
+          echo APP_ENV=production >> build/.env
+          echo $JWT_KEY >> build/.env
           pm2 restart Thesis
 
       - name: Setup and Build Frontend App

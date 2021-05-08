@@ -94,8 +94,6 @@ const eventSchema = new mongoose.Schema(
 );
 
 eventSchema.pre("save", async function (done) {
-  console.log((await User.findById(this.get("from")).select("nick_name").exec()).nick_name);
-
   if (this.isNew) {
     await User.findByIdAndUpdate(this.get("to"), {
       $push: {

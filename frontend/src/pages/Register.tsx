@@ -1,6 +1,7 @@
 import { FC } from "react";
 
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { push } from "connected-react-router";
 
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -29,11 +30,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: "5%",
+    marginTop: "0",
     fontSize: "1.2rem",
 
     [theme.breakpoints.up("md")]: {
-      marginTop: "0",
       width: "40%",
     },
   },
@@ -75,6 +75,7 @@ const registerValidationSchema = yup.object({
 
 const Register: FC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -181,16 +182,16 @@ const Register: FC = () => {
             Register
           </Button>
           <p className={classes.fields}>- or -</p>
-          <Link to="/login" className={classes.link}>
-            <Button
-              color="primary"
-              className={clsx(classes.fields, classes.inputs)}
-              variant="contained"
-              fullWidth
-            >
-              Login
-            </Button>
-          </Link>
+
+          <Button
+            color="primary"
+            className={clsx(classes.fields, classes.inputs)}
+            variant="contained"
+            fullWidth
+            onClick={() => dispatch(push("/login"))}
+          >
+            Login
+          </Button>
         </form>
       </Container>
       <MessageSnackbar />

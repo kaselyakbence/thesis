@@ -3,6 +3,8 @@ import { FC, useState, useEffect, SyntheticEvent } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
+import Modal from "@material-ui/core/Modal";
+
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 import IconButton from "@material-ui/core/IconButton";
@@ -20,8 +22,11 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
+import EventsModal from "../modals/EventsModal";
+
 import { logout } from "../../redux/actions/jwt/logoutAction";
 import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
+import { loadFriends } from "../../redux/actions/profile/loadFriends";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,14 +50,18 @@ const useStyles = makeStyles((theme: Theme) =>
 const Menu: FC = () => {
   const classes = useStyles();
 
-  const notificattionsNum = useSelector<RootState>(
+  const [eventsModalOpen, setEventsModalOpen] = useState(false);
+
+  const notificationsSum = useSelector<RootState>(
     (state) => state.profile.notifications.length
   ) as number;
+  const friensSum = useSelector<RootState>((state) => state.profile.friends.length) as number;
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     loadNotifications();
+    loadFriends();
   }, []);
 
   const toggleDrawer = (event: SyntheticEvent<any, Event>, isOpen: boolean) => {
@@ -82,9 +91,14 @@ const Menu: FC = () => {
             <MenuIcon />
           </IconButton>
           <div className={classes.title} />
-          <IconButton edge="end" color="inherit" aria-label="menu">
-            {notificattionsNum > 0 ? (
-              <Badge badgeContent={notificattionsNum} color="error">
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => setEventsModalOpen(true)}
+          >
+            {notificationsSum > 0 ? (
+              <Badge badgeContent={notificationsSum} color="error">
                 <NotificationsIcon />
               </Badge>
             ) : (
@@ -104,6 +118,13 @@ const Menu: FC = () => {
             <ListItemText primary={"Profile"} />
           </ListItem>
           <Divider />
+          <ListItem>
+            <ListItemText
+              primary={"Friends"}
+              secondary={`${friensSum} friends`}
+              className={classes.logout}
+            />
+          </ListItem>
           <ListItem onClick={logout}>
             <ListItemText primary={"Logout"} className={classes.logout} />
             <ListItemIcon>
@@ -112,6 +133,14 @@ const Menu: FC = () => {
           </ListItem>
         </List>
       </SwipeableDrawer>
+      <Modal
+        open={eventsModalOpen}
+        onClose={() => setEventsModalOpen(false)}
+        aria-labelledby="Friends"
+        aria-describedby="Add friends modal"
+      >
+        <EventsModal onClose={() => setEventsModalOpen(false)} />
+      </Modal>
     </>
   );
 };
