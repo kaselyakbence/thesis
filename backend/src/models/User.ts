@@ -179,15 +179,14 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 
 userSchema.methods.visit = async function () {
   if (this.get("is_public")) {
-    return {
-      nick_name: this.get("nick_name"),
-      email: this.get("email"),
-      first_name: this.get("first_name"),
-      last_name: this.get("last_name"),
-    };
+    return User.findById(this.get("id"))
+      .select("nick_name email first_name last_name friends is_public")
+      .populate("friends", "nick_name")
+      .exec();
   } else {
     return {
       nick_name: this.get("nick_name"),
+      is_public: false,
       isPublic: false,
     };
   }

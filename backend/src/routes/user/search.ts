@@ -31,7 +31,7 @@ router.post(
 
     const regex = new RegExp(`.*${query}.*`);
 
-    const users = await User.find({ nick_name: regex }).select("nick_name").limit(25).exec();
+    const users = await User.find({ nick_name: regex }).select("nick_name").limit(10).exec();
 
     const excludedUsers = users.filter((user) => user.nick_name !== req.currentUser?.nick_name);
 

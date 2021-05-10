@@ -24,10 +24,6 @@ app.use(express.json());
 
 app.use(cors());
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(400).send({ version: "1.0.5" });
-});
-
 app.use("/auth", authRouter);
 
 app.use("/users", userRouter);
