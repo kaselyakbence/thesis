@@ -2,6 +2,7 @@ import { FC, useState, useEffect, SetStateAction } from "react";
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
+import Modal from "@material-ui/core/Modal";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import List from "@material-ui/core/List";
@@ -14,6 +15,8 @@ import CustomModal from "../../../components/utils/CustomModal";
 
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
+
+import VisitModal from "../../../components/modals/VisitModal";
 
 import { makeAuthorizedRequest } from "../../../utils/api";
 import { addFriend } from "../../../redux/actions/user/addFriend";
@@ -33,6 +36,9 @@ interface AddFriendsModalProps {
 const AddFriendsModal: FC<AddFriendsModalProps> = ({ onClose }) => {
   const classes = useStyles();
 
+  const [visitModalOpen, setVisitModalOpen] = useState(false);
+  const [user, setUser] = useState("");
+
   const [query, setQuery] = useState("");
   const [options, setOptions] = useState<{ nick_name: string }[]>([]);
 
@@ -42,35 +48,53 @@ const AddFriendsModal: FC<AddFriendsModalProps> = ({ onClose }) => {
     );
   }, [query]);
 
+  const handleClick = (user: string) => {
+    setUser(user);
+    setVisitModalOpen(true);
+  };
+
   return (
-    <CustomModal onClose={onClose}>
-      <div>
-        <TextField
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className={classes.margin}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <List>
-          {options.map((user) => (
-            <ListItem key={user.nick_name}>
-              <ListItemText primary={user.nick_name} />
-              <ListItemIcon onClick={() => addFriend(user.nick_name)}>
-                <IconButton>
-                  <AddIcon />
-                </IconButton>
-              </ListItemIcon>
-            </ListItem>
-          ))}
-        </List>
-      </div>
-    </CustomModal>
+    <>
+      <CustomModal onClose={onClose}>
+        <div>
+          <TextField
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className={classes.margin}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <List>
+            {options.map((user) => (
+              <ListItem key={user.nick_name}>
+                <ListItemText
+                  primary={user.nick_name}
+                  onClick={() => handleClick(user.nick_name)}
+                />
+                <ListItemIcon onClick={() => addFriend(user.nick_name)}>
+                  <IconButton>
+                    <AddIcon />
+                  </IconButton>
+                </ListItemIcon>
+              </ListItem>
+            ))}
+          </List>
+        </div>
+      </CustomModal>
+      <Modal
+        open={visitModalOpen}
+        onClose={() => setVisitModalOpen(false)}
+        aria-labelledby="Visit"
+        aria-describedby="Visit user modal"
+      >
+        <VisitModal nick_name={user} onClose={() => setVisitModalOpen(false)} />
+      </Modal>
+    </>
   );
 };
 

@@ -1,8 +1,8 @@
-import { User, UserDoc } from "../models/User";
+import { User /*, UserDoc*/ } from "../models/User";
 
 import { Event } from "../models/Event";
 
-export const migrate = async () => {
+export const populate = async () => {
   //TESTING
   const user = User.build({
     email: "test@test.com",
@@ -21,10 +21,10 @@ export const migrate = async () => {
   const event = Event.buildFriendRequest(user2.id, user.id);
   await event.save();
 
-  console.log("Users:");
+  /* console.log("Users:");
 
   console.log((await User.findOne({ nick_name: user.nick_name }).exec()) as UserDoc);
   console.log("Events:");
 
-  console.log(await Event.find().exec());
+  console.log(await Event.find().exec());*/
 };

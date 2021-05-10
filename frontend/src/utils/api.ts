@@ -17,3 +17,23 @@ export const makeAuthorizedRequest = async (
     body: JSON.stringify(body),
   });
 };
+
+//Types
+interface PublicVisitedUser {
+  nick_name: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  friends: { nick_name: string }[];
+
+  is_public: true;
+}
+
+interface PrivateVisitedUser {
+  nick_name: string;
+  email: string;
+
+  is_public: false;
+}
+
+export type VisitedUser = PublicVisitedUser | PrivateVisitedUser;
