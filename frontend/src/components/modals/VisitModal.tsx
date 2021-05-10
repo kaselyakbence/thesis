@@ -17,8 +17,13 @@ import { makeAuthorizedRequest, VisitedUser } from "../../utils/api";
 const useStyles = makeStyles(() =>
   createStyles({
     modal: {
-      width: "85vw",
-      height: "60vh",
+      minHeight: "70vh",
+      minWidth: "80vw",
+    },
+    list: {
+      height: "50vh",
+      width: "70vw",
+      overflowY: "auto",
     },
   })
 );
@@ -31,13 +36,15 @@ interface EventsModalProps {
 const VisitModal: FC<EventsModalProps> = ({ nick_name, onClose }) => {
   const classes = useStyles();
 
+  const [queryedUser, setQueryedUser] = useState(nick_name);
+
   const [user, setUser] = useState<VisitedUser | null>(null);
 
   useEffect(() => {
-    makeAuthorizedRequest(`/users/${nick_name}/visit`, "GET").then((result) =>
+    makeAuthorizedRequest(`/users/${queryedUser}/visit`, "GET").then((result) =>
       result.json().then((res) => setUser(res))
     );
-  }, [nick_name]);
+  }, [queryedUser]);
 
   return (
     <CustomModal onClose={onClose}>
@@ -56,17 +63,22 @@ const VisitModal: FC<EventsModalProps> = ({ nick_name, onClose }) => {
                   user.last_name ?? "unknown"
                 }`}</Typography>
                 <Divider />
-                {user.friends.length > 0 ? (
-                  <List>
-                    {user.friends.map((friend, i) => (
-                      <ListItem key={i}>
-                        <ListItemText>{friend.nick_name}</ListItemText>
-                      </ListItem>
-                    ))}
-                  </List>
-                ) : (
-                  <Typography component="address">This user has no friends :c</Typography>
-                )}
+                <>
+                  <Typography>Friends:</Typography>
+                  {user.friends.length > 0 ? (
+                    <List className={classes.list}>
+                      {user.friends.map((friend, i) => (
+                        <ListItem key={i}>
+                          <ListItemText onClick={() => setQueryedUser(friend.nick_name)}>
+                            {friend.nick_name}
+                          </ListItemText>
+                        </ListItem>
+                      ))}
+                    </List>
+                  ) : (
+                    <Typography component="address">This user has no friends :c</Typography>
+                  )}
+                </>
               </>
             ) : (
               <Typography component="address">This is a private user</Typography>

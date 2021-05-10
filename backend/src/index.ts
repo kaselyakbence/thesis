@@ -14,8 +14,10 @@ app.listen(port, async () => {
   //Connect to MongoDB database
   await connect();
 
-  //Migartion
-  await populate();
+  //Populate in development
+  if ((process.env.APP_ENV ?? "development") === "development") {
+    populate();
+  }
 
   console.log(`App listening at http://localhost:${port}`);
 });

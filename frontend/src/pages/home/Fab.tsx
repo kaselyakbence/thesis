@@ -5,7 +5,7 @@ import Modal from "@material-ui/core/Modal";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 
-import AddFriendsModal from "./modals/AddFriendsModal";
+import AddFriendsModal from "../../components/modals/AddFriendsModal";
 
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import CloseIcon from "@material-ui/icons/Close";

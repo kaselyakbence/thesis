@@ -11,20 +11,25 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import IconButton from "@material-ui/core/IconButton";
 
-import CustomModal from "../../../components/utils/CustomModal";
+import CustomModal from "../utils/CustomModal";
 
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
 
-import VisitModal from "../../../components/modals/VisitModal";
+import VisitModal from "./VisitModal";
 
-import { makeAuthorizedRequest } from "../../../utils/api";
-import { addFriend } from "../../../redux/actions/user/addFriend";
+import { makeAuthorizedRequest } from "../../utils/api";
+import { addFriend } from "../../redux/actions/user/addFriend";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     margin: {
       margin: theme.spacing(1),
+    },
+    list: {
+      height: "60vh",
+      width: "70vw",
+      overflowY: "auto",
     },
   })
 );
@@ -69,7 +74,7 @@ const AddFriendsModal: FC<AddFriendsModalProps> = ({ onClose }) => {
               ),
             }}
           />
-          <List>
+          <List className={classes.list}>
             {options.map((user) => (
               <ListItem key={user.nick_name}>
                 <ListItemText

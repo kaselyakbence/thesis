@@ -1,6 +1,7 @@
 import { FC, useState, useEffect, SyntheticEvent } from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { push } from "connected-react-router";
 import { RootState } from "../../redux/store";
 
 import Modal from "@material-ui/core/Modal";
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Menu: FC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [eventsModalOpen, setEventsModalOpen] = useState(false);
 
@@ -118,7 +120,10 @@ const Menu: FC = () => {
             <ListItemText primary={"Profile"} />
           </ListItem>
           <Divider />
-          <ListItem>
+          <ListItem onClick={() => dispatch(push("/"))}>
+            <ListItemText primary={"Home"} className={classes.logout} />
+          </ListItem>
+          <ListItem onClick={() => dispatch(push("/friends"))}>
             <ListItemText
               primary={"Friends"}
               secondary={`${friensSum} friends`}

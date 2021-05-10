@@ -33,6 +33,10 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: "150px",
       width: "fit-content",
     },
+    list: {
+      height: "80vh",
+      overflowY: "auto",
+    },
     no_events: {
       minWidth: "200px",
       width: "fit-content",
@@ -84,7 +88,7 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
   return (
     <>
       <CustomModal onClose={onClose}>
-        <List>
+        <List className={classes.list}>
           <>
             {notifications.length === 0 ? (
               <ListItem>

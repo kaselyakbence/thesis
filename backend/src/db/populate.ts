@@ -1,6 +1,38 @@
-import { User /*, UserDoc*/ } from "../models/User";
+import faker from "faker";
+
+import { User, UserDoc } from "../models/User";
 
 import { Event } from "../models/Event";
+
+const registerRandomUser = async () => {
+  const user = User.build({
+    nick_name: faker.internet.userName(),
+    email: faker.internet.exampleEmail(),
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
+    password: "password",
+  });
+
+  try {
+    await user.save();
+    return user;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const registerFriends = (val: number, originalUser: UserDoc) => {
+  const users = [...Array(val)].map(() => registerRandomUser());
+
+  Promise.all(users).then((res) => {
+    res.forEach((user, i) =>
+      res.forEach((user2, k) => (k > i ? user?.addFriend(user2?.id) : null))
+    );
+    res.forEach((user, i) =>
+      i % 3 === 0 ? Event.buildFriendRequest(user?.id, originalUser.id).save() : null
+    );
+  });
+};
 
 export const populate = async () => {
   //TESTING
@@ -18,13 +50,8 @@ export const populate = async () => {
   });
   await user2.save();
 
+  registerFriends(40, user);
+
   const event = Event.buildFriendRequest(user2.id, user.id);
   await event.save();
-
-  /* console.log("Users:");
-
-  console.log((await User.findOne({ nick_name: user.nick_name }).exec()) as UserDoc);
-  console.log("Events:");
-
-  console.log(await Event.find().exec());*/
 };

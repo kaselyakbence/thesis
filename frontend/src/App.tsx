@@ -3,9 +3,10 @@ import { FC } from "react";
 import { Provider as ReduxProvider } from "react-redux";
 
 import { ConnectedRouter } from "connected-react-router";
-import { ProtectedRoute } from "./components/auth/PrivateRoute";
+import ProtectedRoute from "./components/auth/PrivateRoute";
+import PublicRoute from "./components/auth/PublicRoute";
 
-import { Switch, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
 
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 
@@ -17,6 +18,7 @@ import "./style/app.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
+import Friends from "./pages/Friends";
 
 const theme = createMuiTheme();
 
@@ -27,12 +29,15 @@ const App: FC = () => {
         <ThemeProvider theme={theme}>
           <ConnectedRouter history={history}>
             <Switch>
-              <Route path="/login">
+              <PublicRoute path="/login">
                 <Login />
-              </Route>
-              <Route path="/register">
+              </PublicRoute>
+              <PublicRoute path="/register">
                 <Register />
-              </Route>
+              </PublicRoute>
+              <ProtectedRoute path="/friends">
+                <Friends />
+              </ProtectedRoute>
               <ProtectedRoute path="/">
                 <Home />
               </ProtectedRoute>
