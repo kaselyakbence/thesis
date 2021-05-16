@@ -29,10 +29,11 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
     },
     page: { backgroundColor: theme.palette.background.paper, height: "100vh", overflowY: "auto" },
-    header: { width: "100%" },
+    header: { width: "100%", display: "flex", justifyContent: "center" },
     list: {
       position: "relative",
       minHeight: "90vh",
+      marginLeft: "5%",
     },
     add_button: {
       position: "absolute",
@@ -68,12 +69,10 @@ const Friends: FC = () => {
     setQueryedFriends(friends.filter((friend) => friend.nick_name.includes(query)));
   }, [query, friends]);
 
-  const handleClick = (user: string) => {
-    setUser(user);
+  const handleClick = (chosenUser: string) => {
+    setUser(chosenUser);
     setVisitModalOpen(true);
   };
-
-  console.log(queryedFriends.length);
 
   return (
     <>

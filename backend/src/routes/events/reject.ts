@@ -5,7 +5,7 @@ import express, { Request, Response } from "express";
 import { authorize } from "../../middlewares/authorization-middleware";
 
 //Models
-import { Event } from "../../models/Event";
+import { Event, EventDoc } from "../../models/Event";
 
 //Errors
 import { BadRequestError } from "../../errors/bad-request-error";
@@ -16,15 +16,15 @@ const router = express.Router();
 router.get("/:pubId/reject", authorize, async (req: Request, res: Response) => {
   const { pubId } = req.params;
 
-  const event = await Event.findOne({ pubId }).exec();
+  const event = (await Event.findOne({ pubId }).exec()) as EventDoc;
 
   if (!event) throw new BadRequestError("Event not found");
 
-  if (event.owner !== req.currentUser?.nick_name) throw new UnauthorizedError();
+  if (event.to?.toString() !== req.currentUser?.id) throw new UnauthorizedError();
 
   await event.reject();
 
   res.status(200).send({ msg: "Accepted" });
 });
 
-export { router as acceptRouter };
+export { router as rejectRouter };

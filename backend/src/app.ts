@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 
 //Npm package that renders express thrown errors async
 import "express-async-errors";
