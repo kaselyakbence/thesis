@@ -129,7 +129,12 @@ const userSchema = new mongoose.Schema(
         ref: "room",
       },
     ],
-    dues: [],
+    dues: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "due",
+      },
+    ],
     is_public: {
       type: Boolean,
       default: true,
@@ -140,8 +145,7 @@ const userSchema = new mongoose.Schema(
   {
     //Creating JSON from a User instance excludes sensible data
     toJSON: {
-      transform: function (doc, ret) {
-        //ret.id = ret._id;
+      transform: function (_, ret) {
         delete ret._id;
 
         delete ret.password;
@@ -150,8 +154,7 @@ const userSchema = new mongoose.Schema(
     },
     //Creating an Object from a User instance excludes sensible data
     toObject: {
-      transform: function (doc, ret) {
-        //ret.id = ret._id;
+      transform: function (_, ret) {
         delete ret._id;
 
         delete ret.password;
@@ -208,6 +211,10 @@ userSchema.methods.getFriends = function () {
 
 userSchema.methods.getRequests = async function () {
   return User.findById(this.id, "events").exec();
+};
+
+userSchema.methods.getDues = async function () {
+  return this.populate("dues");
 };
 
 const User = mongoose.model<UserDoc, UserModel>("user", userSchema);
