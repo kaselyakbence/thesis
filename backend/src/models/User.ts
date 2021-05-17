@@ -139,6 +139,9 @@ const userSchema = new mongoose.Schema(
         balance: {
           type: Number,
         },
+        from: {
+          type: String,
+        },
       },
     ],
     is_public: {
@@ -219,7 +222,7 @@ userSchema.methods.getRequests = async function () {
   return User.findById(this.id, "events").exec();
 };
 
-userSchema.methods.getDues = async function () {
+userSchema.methods.getDues = function () {
   return this.get("dues");
 };
 

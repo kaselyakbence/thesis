@@ -8,14 +8,16 @@ import { nanoid } from "nanoid";
 interface DueAttrs {
   name: string;
   desc?: string;
-  items: any[];
-  owner: mongoose.Types.ObjectId;
-  receiver: mongoose.Types.ObjectId;
+  items: { name: string; value: number }[];
+  owner: string;
+  receiver: string;
+  active?: boolean;
 }
 
 //Interface for DueModel
 interface DueModel extends mongoose.Model<any> {
   build(attrs: DueAttrs): DueDoc;
+  activate(): Promise<void>;
   pubId: string;
   name: string;
   desc?: string;
@@ -28,6 +30,7 @@ interface DueModel extends mongoose.Model<any> {
 
 //Interface for the properties of Due Document
 export interface DueDoc extends mongoose.Document {
+  activate(): Promise<void>;
   pubId: string;
   name: string;
   desc?: string;
@@ -70,13 +73,11 @@ const dueSchema = new mongoose.Schema(
       require: true,
     },
     owner: {
-      ref: "user",
-      type: mongoose.Types.ObjectId,
+      type: String,
       require: true,
     },
     receiver: {
-      ref: "user",
-      type: mongoose.Types.ObjectId,
+      type: String,
       require: true,
     },
     active: { type: Boolean, require: true, default: false },
@@ -105,9 +106,19 @@ const dueSchema = new mongoose.Schema(
   }
 );
 
-dueSchema.pre("save", async function (done) {
-  if (this.isNew) {
-    await User.findByIdAndUpdate(this.get("owner"), {
+dueSchema.virtual("balance").get(function (this: DueModel) {
+  return this.items.reduce((acc, curr) => acc + curr.value, 0);
+});
+
+dueSchema.statics.build = (attrs: DueAttrs) => {
+  return new Due({ pubId: nanoid(), created_at: new Date(), ...attrs });
+};
+
+dueSchema.methods.activate = async function () {
+  this.set("active", true);
+  await User.findOneAndUpdate(
+    { nick_name: this.get("owner") },
+    {
       $push: {
         dues: {
           pubId: this.get("pubId"),
@@ -116,9 +127,12 @@ dueSchema.pre("save", async function (done) {
           balance: this.get("balance"),
         },
       },
-    }).exec();
+    }
+  ).exec();
 
-    await User.findByIdAndUpdate(this.get("receiver"), {
+  await User.findOneAndUpdate(
+    { nick_name: this.get("receiver") },
+    {
       $push: {
         dues: {
           pubId: this.get("pubId"),
@@ -127,17 +141,8 @@ dueSchema.pre("save", async function (done) {
           balance: 0 - this.get("balance"),
         },
       },
-    }).exec();
-  }
-  done();
-});
-
-dueSchema.virtual("balance").get(function (this: DueModel) {
-  return this.items.reduce((acc, curr) => acc + curr.value, 0);
-});
-
-dueSchema.statics.build = (attrs: DueAttrs) => {
-  return new Due({ pubId: nanoid(), created_at: new Date(), ...attrs });
+    }
+  ).exec();
 };
 
 const Due = mongoose.model<DueDoc, DueModel>("due", dueSchema);

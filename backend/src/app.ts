@@ -8,6 +8,7 @@ import { authRouter } from "./routes/auth";
 import { userRouter } from "./routes/user";
 import { profileRouter } from "./routes/profile";
 import { eventRouter } from "./routes/events";
+import { duesRouter } from "./routes/dues";
 
 //Errors
 import { NotFoundError } from "./errors/not-found-error";
@@ -31,6 +32,8 @@ app.use("/users", userRouter);
 app.use("/profile", profileRouter);
 
 app.use("/events", eventRouter);
+
+app.use("/dues", duesRouter);
 
 //If Router not found
 app.all("*", async () => {

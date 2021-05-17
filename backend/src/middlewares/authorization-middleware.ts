@@ -2,10 +2,12 @@ import { Request, Response, NextFunction } from "express";
 
 import jwt from "jsonwebtoken";
 
+import mongoose from "mongoose";
+
 import { UnauthorizedError } from "../errors/unauthorized-error";
 
 interface UserPayload {
-  id: string;
+  id: mongoose.Types.ObjectId;
   nick_name: string;
 }
 

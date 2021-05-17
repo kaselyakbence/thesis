@@ -54,20 +54,24 @@ export const populate = async () => {
 
   const due = Due.build({
     name: "Test due",
-    owner: user.id,
-    receiver: user2.id,
+    owner: user.nick_name,
+    receiver: user2.nick_name,
     desc: "Test description",
     items: [{ name: "Name", value: 2 }],
   });
 
   await due.save();
 
-  registerFriends(40, user);
+  await due.activate();
 
-  const event = Event.buildFriendRequest(user2.id, user.id);
-  await event.save();
+  //registerFriends(40, user);
 
-  console.log("Dues:", await Due.find().exec());
+  user.addFriend(user2.id);
 
-  console.log("Users:", await User.find().exec());
+  // const event = Event.buildFriendRequest(user2.id, user.id);
+  // await event.save();
+
+  //   console.log("Dues:", await Due.find().exec());
+
+  //   console.log("User:", (await User.findById(user2.id).exec()) as UserDoc);
 };
