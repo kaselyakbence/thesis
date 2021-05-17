@@ -8,6 +8,7 @@ import { nanoid } from "nanoid";
 interface DueAttrs {
   name: string;
   desc?: string;
+  items: any[];
   owner: mongoose.Types.ObjectId;
   receiver: mongoose.Types.ObjectId;
 }
@@ -108,13 +109,23 @@ dueSchema.pre("save", async function (done) {
   if (this.isNew) {
     await User.findByIdAndUpdate(this.get("owner"), {
       $push: {
-        dues: this.get("id"),
+        dues: {
+          pubId: this.get("pubId"),
+          name: this.get("name"),
+          from: this.get("receiver"),
+          balance: this.get("balance"),
+        },
       },
     }).exec();
 
     await User.findByIdAndUpdate(this.get("receiver"), {
       $push: {
-        dues: this.get("id"),
+        dues: {
+          pubId: this.get("pubId"),
+          name: this.get("name"),
+          from: this.get("owner"),
+          balance: 0 - this.get("balance"),
+        },
       },
     }).exec();
   }

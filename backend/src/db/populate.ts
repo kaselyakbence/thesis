@@ -57,6 +57,7 @@ export const populate = async () => {
     owner: user.id,
     receiver: user2.id,
     desc: "Test description",
+    items: [{ name: "Name", value: 2 }],
   });
 
   await due.save();

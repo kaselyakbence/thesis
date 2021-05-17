@@ -131,8 +131,14 @@ const userSchema = new mongoose.Schema(
     ],
     dues: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: "due",
+        pubId: { type: String, require: true },
+        name: {
+          type: String,
+          require: true,
+        },
+        balance: {
+          type: Number,
+        },
       },
     ],
     is_public: {
@@ -214,7 +220,7 @@ userSchema.methods.getRequests = async function () {
 };
 
 userSchema.methods.getDues = async function () {
-  return this.populate("dues");
+  return this.get("dues");
 };
 
 const User = mongoose.model<UserDoc, UserModel>("user", userSchema);
