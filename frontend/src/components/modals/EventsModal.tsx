@@ -15,13 +15,12 @@ import CustomModal from "../utils/CustomModal";
 
 import { RootState } from "../../redux/store";
 
-import { Notification } from "../../redux/reducers/profileReducers/notificationsReducer";
+import { Notification, EventType } from "../../redux/reducers/profileReducers/notificationsReducer";
 
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 
 import { makeAuthorizedRequest } from "../../utils/api";
-import { EventType } from "../../redux/reducers/profileReducers/notificationsReducer";
 import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
 import { loadFriends } from "../../redux/actions/profile/loadFriends";
 
@@ -104,6 +103,32 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
                         className={classes.events_text}
                         onClick={() => openVisited(notification.from)}
                       >{`Friend request from: ${notification.from}`}</ListItemText>
+                      <ListItemIcon>
+                        <IconButton
+                          onClick={() => handleAccept(notification.pubId, notification.type)}
+                        >
+                          <CheckIcon className={classes.accept_icon} />
+                        </IconButton>
+                      </ListItemIcon>
+                      <ListItemIcon>
+                        <IconButton onClick={() => handleReject(notification.pubId)}>
+                          <ClearIcon className={classes.reject_icon} />
+                        </IconButton>
+                      </ListItemIcon>
+                    </ListItem>
+                  ) : null
+                )
+              : null}
+            {notifications.some((notification) => notification.type === "LENT_REQUEST")
+              ? notifications.map((notification) =>
+                  notification.type === "LENT_REQUEST" ? (
+                    <ListItem key={notification.pubId}>
+                      <ListItemText
+                        className={classes.events_text}
+                        onClick={() => {
+                          console.log(notification.pubId);
+                        }}
+                      >{`You owe money to: ${notification.from}`}</ListItemText>
                       <ListItemIcon>
                         <IconButton
                           onClick={() => handleAccept(notification.pubId, notification.type)}

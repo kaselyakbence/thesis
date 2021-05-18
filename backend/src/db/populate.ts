@@ -64,14 +64,14 @@ export const populate = async () => {
 
   await due.activate();
 
-  //registerFriends(40, user);
+  registerFriends(40, user);
 
-  user.addFriend(user2.id);
+  //user.addFriend(user2.id);
 
   // const event = Event.buildFriendRequest(user2.id, user.id);
   // await event.save();
 
-  //   console.log("Dues:", await Due.find().exec());
+  console.log("Dues:", await Due.find().exec());
 
-  //   console.log("User:", (await User.findById(user2.id).exec()) as UserDoc);
+  console.log("User:", (await User.findById(user2.id).exec()) as UserDoc);
 };

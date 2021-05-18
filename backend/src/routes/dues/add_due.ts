@@ -72,7 +72,7 @@ router.post(
 
         console.log(await Event.find().exec());
 
-        res.status(201).send({ msg: "Due requested" });
+        res.status(202).send({ msg: "Due requested" });
       }
     } catch (e) {
       if (!user) throw new BadRequestError("Due not saved");

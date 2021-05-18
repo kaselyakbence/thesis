@@ -1,10 +1,9 @@
-export type EventType = "FRIEND_REQUEST" | "PARTICIPATION_REQUEST";
+export type EventType = "FRIEND_REQUEST" | "PARTICIPATION_REQUEST" | "LENT_REQUEST";
 
 export interface Notification {
   pubId: string;
   type: EventType;
   from: string;
-  payload?: string;
 }
 
 export const initialState: Notification[] = [];
