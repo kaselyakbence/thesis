@@ -4,6 +4,14 @@ import { Password } from "../utils/password";
 
 import { EventType } from "./Event";
 
+export interface UserDue {
+  _id: string;
+  pubId: string;
+  name: string;
+  balance: number;
+  from: string;
+}
+
 interface UserEvent {
   pubId: string;
   type: string;
@@ -36,6 +44,7 @@ interface UserModel extends mongoose.Model<any> {
       }
     ];
   }>;
+  getDues(): UserDue[];
 }
 
 //Interface for the properties of User Document
@@ -67,6 +76,7 @@ export interface UserDoc extends mongoose.Document {
       }
     ];
   }>;
+  getDues(): UserDue[];
   visit(): Promise<
     | {
         nick_name: string;
@@ -120,6 +130,9 @@ const userSchema = new mongoose.Schema(
         from: {
           type: String,
           require: true,
+        },
+        balance: {
+          type: Number,
         },
       },
     ],
@@ -222,8 +235,8 @@ userSchema.methods.getRequests = async function () {
   return User.findById(this.id, "events").exec();
 };
 
-userSchema.methods.getDues = function () {
-  return this.get("dues");
+userSchema.methods.getDues = async function () {
+  return User.findById(this.id, "dues").exec();
 };
 
 const User = mongoose.model<UserDoc, UserModel>("user", userSchema);

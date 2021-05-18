@@ -27,6 +27,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import CustomModal from "../utils/CustomModal";
 
 import { addDue } from "../../redux/actions/dues/addDueAction";
+import { loadDues } from "../../redux/actions/profile/loadDues";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -107,6 +108,8 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
     validationSchema: dueValidationSchema,
     onSubmit: async (values) => {
       addDue({ ...values, items });
+      onClose(false);
+      loadDues();
     },
   });
 
