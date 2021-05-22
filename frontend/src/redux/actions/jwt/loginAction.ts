@@ -27,6 +27,7 @@ export const login = async ({ nick_name, password }: LoginData): Promise<void> =
 
   if (res.status === 200) {
     store.dispatch({ type: "LOGIN", payload: resBody.jwt_token });
+    localStorage.setItem("jwt_key", resBody.jwt_token);
     store.dispatch(push("/"));
   }
   if (res.status === 403) {
