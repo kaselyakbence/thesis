@@ -1,6 +1,6 @@
 type ActionTypes = "LOGIN" | "LOGOUT";
 
-const initialState: string | null = null;
+const initialState: string | null = localStorage.getItem("jwt_key") ?? null;
 
 export type Action = { type: ActionTypes; payload?: string };
 

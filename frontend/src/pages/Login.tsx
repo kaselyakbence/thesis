@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, lazy, Suspense } from "react";
 
 import { useDispatch } from "react-redux";
 import { push } from "connected-react-router";
@@ -13,7 +13,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 
-import MessageSnackbar from "../components/display/MessageSnackbar";
+const MessageSnackbar = lazy(() => import("../components/display/MessageSnackbar"));
 
 import { login } from "../redux/actions/jwt/loginAction";
 
@@ -139,7 +139,9 @@ const Login: FC = () => {
           </Button>
         </form>
       </Container>
-      <MessageSnackbar />
+      <Suspense fallback={<p>Loading...</p>}>
+        <MessageSnackbar />
+      </Suspense>
     </>
   );
 };
