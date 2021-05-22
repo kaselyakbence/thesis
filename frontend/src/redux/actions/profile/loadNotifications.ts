@@ -7,6 +7,7 @@ export const loadNotifications = async () => {
 
   if (res.status === 200) {
     const notifications = await res.json();
+
     store.dispatch({ type: "LOAD_NOTIFICATIONS", payload: notifications });
   }
 };

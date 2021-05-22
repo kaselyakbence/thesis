@@ -32,7 +32,7 @@ export const login = async ({ nick_name, password }: LoginData): Promise<void> =
   if (res.status === 403) {
     store.dispatch({
       type: "ADD_MESSAGE",
-      payload: { severity: "error", desciption: "Wrong email or password" },
+      payload: { severity: "error", desciption: "Wrong username or password" },
     });
   }
   if (res.status === 500) {

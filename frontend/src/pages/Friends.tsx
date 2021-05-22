@@ -6,14 +6,15 @@ import { Friend } from "../redux/reducers/profileReducers/friendsReducer";
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
-import Divider from "@material-ui/core/Divider";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
 import Modal from "@material-ui/core/Modal";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import ListItemText from "@material-ui/core/ListItemText";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import Menu from "../components/display/Menu";
 import SearchIcon from "@material-ui/icons/Search";
@@ -21,7 +22,6 @@ import AddIcon from "@material-ui/icons/Add";
 
 import AddFriendsModal from "../components/modals/AddFriendsModal";
 import VisitModal from "../components/modals/VisitModal";
-import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,10 +29,11 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
     },
     page: { backgroundColor: theme.palette.background.paper, height: "100vh", overflowY: "auto" },
-    header: { width: "100%" },
+    header: { width: "100%", display: "flex", justifyContent: "center" },
     list: {
       position: "relative",
       minHeight: "90vh",
+      marginLeft: "5%",
     },
     add_button: {
       position: "absolute",
@@ -68,12 +69,10 @@ const Friends: FC = () => {
     setQueryedFriends(friends.filter((friend) => friend.nick_name.includes(query)));
   }, [query, friends]);
 
-  const handleClick = (user: string) => {
-    setUser(user);
+  const handleClick = (chosenUser: string) => {
+    setUser(chosenUser);
     setVisitModalOpen(true);
   };
-
-  console.log(queryedFriends.length);
 
   return (
     <>

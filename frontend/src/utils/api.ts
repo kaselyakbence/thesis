@@ -37,3 +37,20 @@ interface PrivateVisitedUser {
 }
 
 export type VisitedUser = PublicVisitedUser | PrivateVisitedUser;
+
+export interface VisitedDue {
+  pubId: string;
+  name: string;
+  desc: string;
+  created_at: string;
+  owner: string;
+  receiver: string;
+  items: { name: string; value: number }[];
+}
+
+export interface UserDue {
+  pubId: string;
+  name: string;
+  from: string;
+  balance: number;
+}
