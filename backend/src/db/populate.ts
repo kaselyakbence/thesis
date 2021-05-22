@@ -2,6 +2,8 @@ import faker from "faker";
 
 import { User, UserDoc } from "../models/User";
 
+import { Due } from "../models/Due";
+
 import { Event } from "../models/Event";
 
 const registerRandomUser = async () => {
@@ -17,7 +19,7 @@ const registerRandomUser = async () => {
     await user.save();
     return user;
   } catch (e) {
-    console.log(e);
+    //console.log(e);
   }
 };
 
@@ -50,8 +52,26 @@ export const populate = async () => {
   });
   await user2.save();
 
+  const due = Due.build({
+    name: "Test due",
+    owner: user.nick_name,
+    receiver: user2.nick_name,
+    desc: "Test description",
+    items: [{ name: "Name", value: 2 }],
+  });
+
+  await due.save();
+
+  await due.activate();
+
   registerFriends(40, user);
 
-  const event = Event.buildFriendRequest(user2.id, user.id);
-  await event.save();
+  //user.addFriend(user2.id);
+
+  // const event = Event.buildFriendRequest(user2.id, user.id);
+  // await event.save();
+
+  // console.log("Dues:", await Due.find().exec());
+
+  // console.log("User:", (await User.findById(user2.id).exec()) as UserDoc);
 };

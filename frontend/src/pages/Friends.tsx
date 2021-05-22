@@ -6,14 +6,15 @@ import { Friend } from "../redux/reducers/profileReducers/friendsReducer";
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
-import Divider from "@material-ui/core/Divider";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
 import Modal from "@material-ui/core/Modal";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import ListItemText from "@material-ui/core/ListItemText";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import Menu from "../components/display/Menu";
 import SearchIcon from "@material-ui/icons/Search";
@@ -21,7 +22,6 @@ import AddIcon from "@material-ui/icons/Add";
 
 import AddFriendsModal from "../components/modals/AddFriendsModal";
 import VisitModal from "../components/modals/VisitModal";
-import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

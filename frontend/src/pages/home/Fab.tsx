@@ -6,10 +6,12 @@ import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 
 import AddFriendsModal from "../../components/modals/AddFriendsModal";
+import AddDueModal from "../../components/modals/AddDueModal";
 
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import CloseIcon from "@material-ui/icons/Close";
 import ContactsIcon from "@material-ui/icons/Contacts";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 // import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,6 +36,7 @@ export default function OpenIconSpeedDial(): JSX.Element {
   const [open, setOpen] = useState(false);
 
   const [friendModalOpen, setFriendModalOpen] = useState(false);
+  const [dueModalOpen, setDueModalOpen] = useState(false);
 
   const handleFabClick = (openModal: Dispatch<SetStateAction<boolean>>) => {
     setOpen(false);
@@ -57,6 +60,12 @@ export default function OpenIconSpeedDial(): JSX.Element {
             tooltipTitle="Friends"
             onClick={() => handleFabClick(setFriendModalOpen)}
           />
+          <SpeedDialAction
+            key="Dues"
+            icon={<AttachMoneyIcon />}
+            tooltipTitle="Dues"
+            onClick={() => handleFabClick(setDueModalOpen)}
+          />
         </SpeedDial>
       </div>
       <Modal
@@ -66,6 +75,14 @@ export default function OpenIconSpeedDial(): JSX.Element {
         aria-describedby="Add friends modal"
       >
         <AddFriendsModal onClose={() => setFriendModalOpen(false)} />
+      </Modal>
+      <Modal
+        open={dueModalOpen}
+        onClose={() => setDueModalOpen(false)}
+        aria-labelledby="Friends"
+        aria-describedby="Add friends modal"
+      >
+        <AddDueModal onClose={() => setDueModalOpen(false)} />
       </Modal>
     </>
   );

@@ -4,8 +4,9 @@ import { nanoid } from "nanoid";
 
 import { User, UserDoc } from "./User";
 import { Room, RoomDoc } from "./Room";
+import { Due, DueDoc } from "./Due";
 
-export type EventType = "FRIEND_REQUEST" | "PARTICIPATION_REQUEST";
+export type EventType = "FRIEND_REQUEST" | "PARTICIPATION_REQUEST" | "LENT_REQUEST";
 
 //Interface for Event
 interface EventAttrs {
@@ -25,6 +26,12 @@ interface EventModel extends mongoose.Model<any> {
     from: mongoose.Types.ObjectId,
     to: mongoose.Types.ObjectId,
     roomPubId: string
+  ): EventDoc;
+  buildLendRequest(
+    dueId: mongoose.Types.ObjectId,
+    from: mongoose.Types.ObjectId,
+    to: mongoose.Types.ObjectId,
+    duePubId: string
   ): EventDoc;
   accept(): Promise<any>;
   reject(): Promise<any>;
@@ -101,6 +108,7 @@ eventSchema.pre("save", async function (done) {
           pubId: this.get("pubId"),
           type: this.get("type"),
           from: (await User.findById(this.get("from")).select("nick_name").exec()).nick_name,
+          payload: this.get("payload"),
         },
       },
     }).exec();
@@ -147,6 +155,21 @@ eventSchema.statics.buildParticipationRequest = (
   });
 };
 
+eventSchema.statics.buildLendRequest = (
+  dueId: mongoose.Types.ObjectId,
+  from: mongoose.Types.ObjectId,
+  to: mongoose.Types.ObjectId,
+  duePubId: string
+) => {
+  return Event.build({
+    type: "LENT_REQUEST",
+    owner: dueId,
+    from,
+    to,
+    payload: duePubId,
+  });
+};
+
 eventSchema.methods.accept = async function () {
   switch (this.get("type")) {
     case "FRIEND_REQUEST":
@@ -158,6 +181,11 @@ eventSchema.methods.accept = async function () {
     case "PARTICIPATION_REQUEST": {
       const room = (await Room.findById(this.get("owner")).exec()) as RoomDoc;
       room.addUser(this.get("to"));
+      return this.remove();
+    }
+    case "LENT_REQUEST": {
+      const due = (await Due.findById(this.get("owner")).exec()) as DueDoc;
+      due.activate();
       return this.remove();
     }
   }

@@ -25,9 +25,12 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 
 import EventsModal from "../modals/EventsModal";
 
+import MessageSnackBar from "./MessageSnackbar";
+
 import { logout } from "../../redux/actions/jwt/logoutAction";
 import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
 import { loadFriends } from "../../redux/actions/profile/loadFriends";
+import { loadDues } from "../../redux/actions/profile/loadDues";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,12 +61,14 @@ const Menu: FC = () => {
     (state) => state.profile.notifications.length
   ) as number;
   const friensSum = useSelector<RootState>((state) => state.profile.friends.length) as number;
+  const duesNum = useSelector<RootState>((state) => state.profile.userDues.length) as number;
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     loadNotifications();
     loadFriends();
+    loadDues();
   }, []);
 
   const toggleDrawer = (event: SyntheticEvent<any, Event>, isOpen: boolean) => {
@@ -117,18 +122,17 @@ const Menu: FC = () => {
       >
         <List>
           <ListItem>
-            <ListItemText primary={"Profile"} />
+            <ListItemText />
           </ListItem>
           <Divider />
           <ListItem onClick={() => dispatch(push("/"))}>
             <ListItemText primary={"Home"} className={classes.logout} />
           </ListItem>
+          <ListItem onClick={() => dispatch(push("/dues"))}>
+            <ListItemText primary={"Dues"} secondary={`${duesNum} dues`} />
+          </ListItem>
           <ListItem onClick={() => dispatch(push("/friends"))}>
-            <ListItemText
-              primary={"Friends"}
-              secondary={`${friensSum} friends`}
-              className={classes.logout}
-            />
+            <ListItemText primary={"Friends"} secondary={`${friensSum} friends`} />
           </ListItem>
           <ListItem onClick={logout}>
             <ListItemText primary={"Logout"} className={classes.logout} />
@@ -146,6 +150,7 @@ const Menu: FC = () => {
       >
         <EventsModal onClose={() => setEventsModalOpen(false)} />
       </Modal>
+      <MessageSnackBar />
     </>
   );
 };

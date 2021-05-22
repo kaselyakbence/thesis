@@ -4,6 +4,13 @@ import { Password } from "../utils/password";
 
 import { EventType } from "./Event";
 
+export interface UserDue {
+  name: string;
+  balance: number;
+  from: string;
+  payload: string;
+}
+
 interface UserEvent {
   pubId: string;
   type: string;
@@ -27,15 +34,9 @@ interface UserModel extends mongoose.Model<any> {
   addFriend(nick_name: string): Promise<UserModel>;
   getFriends(): Promise<UserModel>;
   getRequests(): Promise<{
-    events: [
-      {
-        pubId: string;
-        type: EventType;
-        from: string;
-        payload?: string;
-      }
-    ];
+    events: UserEvent[];
   }>;
+  getDues(): UserDue[];
 }
 
 //Interface for the properties of User Document
@@ -67,6 +68,7 @@ export interface UserDoc extends mongoose.Document {
       }
     ];
   }>;
+  getDues(): UserDue[];
   visit(): Promise<
     | {
         nick_name: string;
@@ -121,6 +123,12 @@ const userSchema = new mongoose.Schema(
           type: String,
           require: true,
         },
+        balance: {
+          type: Number,
+        },
+        payload: {
+          type: String,
+        },
       },
     ],
     rooms: [
@@ -129,7 +137,22 @@ const userSchema = new mongoose.Schema(
         ref: "room",
       },
     ],
-    dues: [],
+    dues: [
+      {
+        _id: false,
+        pubId: { type: String, require: true },
+        name: {
+          type: String,
+          require: true,
+        },
+        balance: {
+          type: Number,
+        },
+        from: {
+          type: String,
+        },
+      },
+    ],
     is_public: {
       type: Boolean,
       default: true,
@@ -140,8 +163,7 @@ const userSchema = new mongoose.Schema(
   {
     //Creating JSON from a User instance excludes sensible data
     toJSON: {
-      transform: function (doc, ret) {
-        //ret.id = ret._id;
+      transform: function (_, ret) {
         delete ret._id;
 
         delete ret.password;
@@ -150,8 +172,7 @@ const userSchema = new mongoose.Schema(
     },
     //Creating an Object from a User instance excludes sensible data
     toObject: {
-      transform: function (doc, ret) {
-        //ret.id = ret._id;
+      transform: function (_, ret) {
         delete ret._id;
 
         delete ret.password;
@@ -208,6 +229,10 @@ userSchema.methods.getFriends = function () {
 
 userSchema.methods.getRequests = async function () {
   return User.findById(this.id, "events").exec();
+};
+
+userSchema.methods.getDues = async function () {
+  return User.findById(this.id, "dues").exec();
 };
 
 const User = mongoose.model<UserDoc, UserModel>("user", userSchema);

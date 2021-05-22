@@ -15,17 +15,17 @@ import CustomModal from "../utils/CustomModal";
 
 import { RootState } from "../../redux/store";
 
-import { Notification } from "../../redux/reducers/profileReducers/notificationsReducer";
+import { Notification, EventType } from "../../redux/reducers/profileReducers/notificationsReducer";
 
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 
 import { makeAuthorizedRequest } from "../../utils/api";
-import { EventType } from "../../redux/reducers/profileReducers/notificationsReducer";
 import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
 import { loadFriends } from "../../redux/actions/profile/loadFriends";
 
 import VisitModal from "./VisitModal";
+import VisitDueModal from "./VisitDueModal";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,6 +61,9 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
   const [visitModalOpen, setVisitModalOpen] = useState(false);
   const [visited, setVisited] = useState("");
 
+  const [dueModalOpen, setDueModalOpen] = useState(false);
+  const [visitedDue, setVisitedDue] = useState("");
+
   const notifications = useSelector<RootState>(
     (state) => state.profile.notifications
   ) as Notification[];
@@ -83,6 +86,11 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
   const openVisited = (pubId: string) => {
     setVisited(pubId);
     setVisitModalOpen(true);
+  };
+
+  const openVisitedDue = (pubId: string) => {
+    setVisitedDue(pubId);
+    setDueModalOpen(true);
   };
 
   return (
@@ -120,6 +128,32 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
                   ) : null
                 )
               : null}
+            {notifications.some((notification) => notification.type === "LENT_REQUEST")
+              ? notifications.map((notification) =>
+                  notification.type === "LENT_REQUEST" ? (
+                    <ListItem key={notification.pubId}>
+                      <ListItemText
+                        className={classes.events_text}
+                        onClick={() => {
+                          openVisitedDue(notification.payload ?? "");
+                        }}
+                      >{`You owe money to: ${notification.from}`}</ListItemText>
+                      <ListItemIcon>
+                        <IconButton
+                          onClick={() => handleAccept(notification.pubId, notification.type)}
+                        >
+                          <CheckIcon className={classes.accept_icon} />
+                        </IconButton>
+                      </ListItemIcon>
+                      <ListItemIcon>
+                        <IconButton onClick={() => handleReject(notification.pubId)}>
+                          <ClearIcon className={classes.reject_icon} />
+                        </IconButton>
+                      </ListItemIcon>
+                    </ListItem>
+                  ) : null
+                )
+              : null}
           </>
         </List>
       </CustomModal>
@@ -130,6 +164,14 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
         aria-describedby="Visit a user modal"
       >
         <VisitModal nick_name={visited} onClose={() => setVisitModalOpen(false)} />
+      </Modal>
+      <Modal
+        open={dueModalOpen}
+        onClose={() => setDueModalOpen(false)}
+        aria-labelledby="Visit"
+        aria-describedby="Visit a due modal"
+      >
+        <VisitDueModal pubId={visitedDue} onClose={() => setDueModalOpen(false)} />
       </Modal>
     </>
   );

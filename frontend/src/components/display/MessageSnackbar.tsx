@@ -5,6 +5,7 @@ import { RootState } from "../../redux/store";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import Portal from "@material-ui/core/Portal";
 
 import { popMessage } from "../../redux/actions/message/PopMessage";
 
@@ -27,11 +28,13 @@ const MessageSnackbar: FC = () => {
   return (
     <>
       {messages.length > 0 ? (
-        <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity={messages[0].severity}>
-            {messages[0].desciption}
-          </Alert>
-        </Snackbar>
+        <Portal>
+          <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity={messages[0].severity}>
+              {messages[0].desciption}
+            </Alert>
+          </Snackbar>
+        </Portal>
       ) : (
         <></>
       )}
