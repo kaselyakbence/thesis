@@ -18,6 +18,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Menu from "../components/display/Menu";
 
 import AddDueModal from "../components/modals/AddDueModal";
+import VisitDueModal from "../components/modals/VisitDueModal";
 
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
@@ -58,12 +59,20 @@ const Dues: FC = () => {
 
   const [dueModalOpen, setDueModalOpen] = useState(false);
 
+  const [visitDueModalOpen, setVisitDueModalOpen] = useState(false);
+  const [visitedDue, setVisitedDue] = useState("");
+
   const [query, setQuery] = useState("");
   const [filteredDues, setFilteredDues] = useState(dues);
 
   useEffect(() => {
     setFilteredDues(dues.filter((due) => due.name.includes(query)));
   }, [query, dues]);
+
+  const openVisitedDue = (pubId: string) => {
+    setVisitedDue(pubId);
+    setVisitDueModalOpen(true);
+  };
 
   return (
     <>
@@ -87,7 +96,7 @@ const Dues: FC = () => {
         {dues.length > 0 ? (
           <Table>
             {filteredDues.map((due, i) => (
-              <TableRow key={i}>
+              <TableRow key={i} onClick={() => openVisitedDue(due.pubId)}>
                 <TableCell align="center">{due.name}</TableCell>
                 <TableCell align="center">{due.from}</TableCell>
                 <TableCell align="center">{`${due.balance} Ft`}</TableCell>
@@ -106,6 +115,14 @@ const Dues: FC = () => {
         aria-describedby="Choose user that receives the due"
       >
         <AddDueModal onClose={() => setDueModalOpen(false)} />
+      </Modal>
+      <Modal
+        open={visitDueModalOpen}
+        onClose={() => setVisitDueModalOpen(false)}
+        aria-labelledby="Visit"
+        aria-describedby="Visit a due modal"
+      >
+        <VisitDueModal pubId={visitedDue} onClose={() => setVisitDueModalOpen(false)} />
       </Modal>
     </>
   );

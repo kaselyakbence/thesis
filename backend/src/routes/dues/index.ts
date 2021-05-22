@@ -2,10 +2,13 @@
 import express from "express";
 
 //Import routes
-import { acceptRouter } from "./add_due";
+import { addRouter } from "./add_due";
+import { detailsRouter } from "./details";
 
 const router = express.Router();
 
-router.use(acceptRouter);
+router.use(addRouter);
+
+router.use(detailsRouter);
 
 export { router as duesRouter };

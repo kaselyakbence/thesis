@@ -108,6 +108,7 @@ eventSchema.pre("save", async function (done) {
           pubId: this.get("pubId"),
           type: this.get("type"),
           from: (await User.findById(this.get("from")).select("nick_name").exec()).nick_name,
+          payload: this.get("payload"),
         },
       },
     }).exec();

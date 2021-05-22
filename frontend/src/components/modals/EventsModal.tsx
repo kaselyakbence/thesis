@@ -25,6 +25,7 @@ import { loadNotifications } from "../../redux/actions/profile/loadNotifications
 import { loadFriends } from "../../redux/actions/profile/loadFriends";
 
 import VisitModal from "./VisitModal";
+import VisitDueModal from "./VisitDueModal";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,6 +61,9 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
   const [visitModalOpen, setVisitModalOpen] = useState(false);
   const [visited, setVisited] = useState("");
 
+  const [dueModalOpen, setDueModalOpen] = useState(false);
+  const [visitedDue, setVisitedDue] = useState("");
+
   const notifications = useSelector<RootState>(
     (state) => state.profile.notifications
   ) as Notification[];
@@ -82,6 +86,11 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
   const openVisited = (pubId: string) => {
     setVisited(pubId);
     setVisitModalOpen(true);
+  };
+
+  const openVisitedDue = (pubId: string) => {
+    setVisitedDue(pubId);
+    setDueModalOpen(true);
   };
 
   return (
@@ -126,7 +135,7 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
                       <ListItemText
                         className={classes.events_text}
                         onClick={() => {
-                          console.log(notification.pubId);
+                          openVisitedDue(notification.payload ?? "");
                         }}
                       >{`You owe money to: ${notification.from}`}</ListItemText>
                       <ListItemIcon>
@@ -155,6 +164,14 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
         aria-describedby="Visit a user modal"
       >
         <VisitModal nick_name={visited} onClose={() => setVisitModalOpen(false)} />
+      </Modal>
+      <Modal
+        open={dueModalOpen}
+        onClose={() => setDueModalOpen(false)}
+        aria-labelledby="Visit"
+        aria-describedby="Visit a due modal"
+      >
+        <VisitDueModal pubId={visitedDue} onClose={() => setDueModalOpen(false)} />
       </Modal>
     </>
   );

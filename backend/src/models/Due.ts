@@ -58,6 +58,7 @@ const dueSchema = new mongoose.Schema(
     },
     items: [
       {
+        _id: false,
         name: {
           type: String,
           require: true,
@@ -88,20 +89,20 @@ const dueSchema = new mongoose.Schema(
       transform: function (_, ret) {
         delete ret._id;
 
+        delete ret.active;
         delete ret.password;
         delete ret.__v;
       },
-      virtuals: true,
     },
     //Creating an Object from a Due instance excludes sensible data
     toObject: {
       transform: function (_, ret) {
         delete ret._id;
 
+        delete ret.active;
         delete ret.password;
         delete ret.__v;
       },
-      virtuals: true,
     },
   }
 );

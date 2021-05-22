@@ -5,11 +5,10 @@ import { Password } from "../utils/password";
 import { EventType } from "./Event";
 
 export interface UserDue {
-  _id: string;
-  pubId: string;
   name: string;
   balance: number;
   from: string;
+  payload: string;
 }
 
 interface UserEvent {
@@ -35,14 +34,7 @@ interface UserModel extends mongoose.Model<any> {
   addFriend(nick_name: string): Promise<UserModel>;
   getFriends(): Promise<UserModel>;
   getRequests(): Promise<{
-    events: [
-      {
-        pubId: string;
-        type: EventType;
-        from: string;
-        payload?: string;
-      }
-    ];
+    events: UserEvent[];
   }>;
   getDues(): UserDue[];
 }
@@ -134,6 +126,9 @@ const userSchema = new mongoose.Schema(
         balance: {
           type: Number,
         },
+        payload: {
+          type: String,
+        },
       },
     ],
     rooms: [
@@ -144,6 +139,7 @@ const userSchema = new mongoose.Schema(
     ],
     dues: [
       {
+        _id: false,
         pubId: { type: String, require: true },
         name: {
           type: String,

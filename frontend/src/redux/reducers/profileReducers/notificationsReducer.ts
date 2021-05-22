@@ -4,6 +4,7 @@ export interface Notification {
   pubId: string;
   type: EventType;
   from: string;
+  payload?: string;
 }
 
 export const initialState: Notification[] = [];

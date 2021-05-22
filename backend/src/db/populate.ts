@@ -19,7 +19,7 @@ const registerRandomUser = async () => {
     await user.save();
     return user;
   } catch (e) {
-    console.log(e);
+    //console.log(e);
   }
 };
 
@@ -71,7 +71,7 @@ export const populate = async () => {
   // const event = Event.buildFriendRequest(user2.id, user.id);
   // await event.save();
 
-  console.log("Dues:", await Due.find().exec());
+  // console.log("Dues:", await Due.find().exec());
 
-  console.log("User:", (await User.findById(user2.id).exec()) as UserDoc);
+  // console.log("User:", (await User.findById(user2.id).exec()) as UserDoc);
 };

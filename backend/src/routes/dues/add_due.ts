@@ -14,6 +14,7 @@ import { User, UserDoc } from "../../models/User";
 
 //Errors
 import { BadRequestError } from "../../errors/bad-request-error";
+import { InternalServerError } from "../../errors/internal-server-error";
 import { UnauthorizedError } from "../../errors/unauthorized-error";
 
 const router = express.Router();
@@ -70,14 +71,12 @@ router.post(
         const lent = Event.buildLendRequest(due.id, req.currentUser?.id, user.id, due.pubId);
         await lent.save();
 
-        console.log(await Event.find().exec());
-
         res.status(202).send({ msg: "Due requested" });
       }
     } catch (e) {
-      if (!user) throw new BadRequestError("Due not saved");
+      throw new InternalServerError("Due not saved");
     }
   }
 );
 
-export { router as acceptRouter };
+export { router as addRouter };
