@@ -47,3 +47,10 @@ export interface VisitedDue {
   receiver: string;
   items: { name: string; value: number }[];
 }
+
+export interface UserDue {
+  pubId: string;
+  name: string;
+  from: string;
+  balance: number;
+}

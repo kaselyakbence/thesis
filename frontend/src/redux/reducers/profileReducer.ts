@@ -44,7 +44,7 @@ const initialState: Profile = {
   userDues: userDueInitialState,
 };
 
-export const profileReducer = (state = initialState, action: Action) => {
+export const profileReducer = (state: Profile = initialState, action: Action): Profile => {
   switch (action.type) {
     case "LOAD_NOTIFICATIONS":
       return { ...state, notifications: notificationsReducer(state.notifications, action) };
@@ -53,6 +53,8 @@ export const profileReducer = (state = initialState, action: Action) => {
     case "LOAD_DUES":
       return { ...state, userDues: duesReducer(state.userDues, action) };
     case "LOAD_USER":
+      return { ...state, user: userReducer(state.user, action) };
+    case "SET_BALANCE":
       return { ...state, user: userReducer(state.user, action) };
     default:
       return state;

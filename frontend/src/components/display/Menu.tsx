@@ -27,10 +27,12 @@ import EventsModal from "../modals/EventsModal";
 
 import MessageSnackBar from "./MessageSnackbar";
 
+import { User } from "../../redux/reducers/profileReducers/userReducer";
 import { logout } from "../../redux/actions/jwt/logoutAction";
 import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
 import { loadFriends } from "../../redux/actions/profile/loadFriends";
 import { loadDues } from "../../redux/actions/profile/loadDues";
+import { loadUser } from "../../redux/actions/profile/loadUser";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,6 +43,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     menuButton: {
       marginRight: theme.spacing(2),
+    },
+    menuHeader: {
+      marginTop: "5%",
+
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    menuHeaderText: {
+      textAlign: "center",
     },
     title: {
       flexGrow: 1,
@@ -57,18 +69,21 @@ const Menu: FC = () => {
 
   const [eventsModalOpen, setEventsModalOpen] = useState(false);
 
+  const [open, setOpen] = useState(false);
+
   const notificationsSum = useSelector<RootState>(
     (state) => state.profile.notifications.length
   ) as number;
   const friensSum = useSelector<RootState>((state) => state.profile.friends.length) as number;
   const duesNum = useSelector<RootState>((state) => state.profile.userDues.length) as number;
 
-  const [open, setOpen] = useState(false);
+  const profile = useSelector<RootState>((state) => state.profile.user) as User;
 
   useEffect(() => {
-    loadNotifications();
-    loadFriends();
+    loadUser();
     loadDues();
+    loadFriends();
+    loadNotifications();
   }, []);
 
   const toggleDrawer = (event: SyntheticEvent<any, Event>, isOpen: boolean) => {
@@ -121,8 +136,11 @@ const Menu: FC = () => {
         onOpen={(e) => toggleDrawer(e, true)}
       >
         <List>
-          <ListItem>
-            <ListItemText />
+          <ListItem className={classes.menuHeader} onClick={() => dispatch(push("/profile"))}>
+            <ListItemText
+              className={classes.menuHeaderText}
+              primary={profile.nick_name ?? "Loading..."}
+            />
           </ListItem>
           <Divider />
           <ListItem onClick={() => dispatch(push("/"))}>

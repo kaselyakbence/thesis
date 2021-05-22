@@ -20,7 +20,6 @@ const useStyles = makeStyles(() =>
     modal: { width: "80vw", height: "80vh" },
     desc: {
       marginTop: "10%",
-
       width: "100%",
     },
     header: { width: "80%", display: "flex", justifyContent: "space-between" },

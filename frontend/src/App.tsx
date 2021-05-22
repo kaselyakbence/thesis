@@ -20,6 +20,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Friends from "./pages/Friends";
 import Dues from "./pages/Dues";
+import Profile from "./pages/Profile";
 
 const theme = createMuiTheme();
 
@@ -41,6 +42,9 @@ const App: FC = () => {
               </ProtectedRoute>
               <ProtectedRoute path="/dues">
                 <Dues />
+              </ProtectedRoute>
+              <ProtectedRoute path="/profile">
+                <Profile />
               </ProtectedRoute>
               <ProtectedRoute path="/">
                 <Home />
