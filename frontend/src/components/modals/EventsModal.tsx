@@ -20,9 +20,8 @@ import { Notification, EventType } from "../../redux/reducers/profileReducers/no
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 
-import { makeAuthorizedRequest } from "../../utils/api";
-import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
-import { loadFriends } from "../../redux/actions/profile/loadFriends";
+import { acceptNotification } from "../../redux/actions/profile/notifications/acceptNotification";
+import { rejectNotification } from "../../redux/actions/profile/notifications/rejectNotifications";
 
 import VisitModal from "./VisitModal";
 import VisitDueModal from "./VisitDueModal";
@@ -69,18 +68,11 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
   ) as Notification[];
 
   const handleAccept = async (pubId: string, event?: EventType) => {
-    await makeAuthorizedRequest(`/events/${pubId}/accept`, "GET");
-    loadNotifications();
-    switch (event) {
-      case "FRIEND_REQUEST":
-        loadFriends();
-        break;
-    }
+    acceptNotification(pubId, event);
   };
 
   const handleReject = async (pubId: string) => {
-    await makeAuthorizedRequest(`/events/${pubId}/reject`, "GET");
-    loadNotifications();
+    rejectNotification(pubId);
   };
 
   const openVisited = (pubId: string) => {

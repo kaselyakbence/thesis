@@ -19,21 +19,31 @@ export const addDue = async ({ name, desc, nick_name, items }: DueData): Promise
 
   if (desc) body.desc = desc;
 
-  const res = await makeAuthorizedRequest("/dues/create", "POST", body);
+  try {
+    const res = await makeAuthorizedRequest("/dues/create", "POST", body);
 
-  switch (res.status) {
-    case 201:
-      store.dispatch({
-        type: "ADD_MESSAGE",
-        payload: { severity: "success", desciption: "Due added" },
-      });
+    switch (res.status) {
+      case 201:
+        store.dispatch({
+          type: "ADD_MESSAGE",
+          payload: { severity: "success", desciption: "Due added" },
+        });
 
-      break;
-    case 202:
-      store.dispatch({
-        type: "ADD_MESSAGE",
-        payload: { severity: "warning", desciption: "You are not friends, due requested" },
-      });
-      break;
+        break;
+      case 202:
+        store.dispatch({
+          type: "ADD_MESSAGE",
+          payload: { severity: "warning", desciption: "You are not friends, due requested" },
+        });
+        break;
+    }
+  } catch (_) {
+    store.dispatch({
+      type: "ADD_MESSAGE",
+      payload: {
+        severity: "warning",
+        desciption: "You are offline. Due saved and will be added the next time you go online",
+      },
+    });
   }
 };

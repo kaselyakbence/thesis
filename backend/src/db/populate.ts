@@ -66,7 +66,7 @@ export const populate = async () => {
 
   registerFriends(40, user);
 
-  //user.addFriend(user2.id);
+  user.addFriend(user2.id);
 
   // const event = Event.buildFriendRequest(user2.id, user.id);
   // await event.save();

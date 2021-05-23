@@ -29,7 +29,7 @@ import MessageSnackBar from "./MessageSnackbar";
 
 import { User } from "../../redux/reducers/profileReducers/userReducer";
 import { logout } from "../../redux/actions/jwt/logoutAction";
-import { loadNotifications } from "../../redux/actions/profile/loadNotifications";
+import { loadNotifications } from "../../redux/actions/profile/notifications/loadNotifications";
 import { loadFriends } from "../../redux/actions/profile/loadFriends";
 import { loadDues } from "../../redux/actions/profile/loadDues";
 import { loadUser } from "../../redux/actions/profile/loadUser";

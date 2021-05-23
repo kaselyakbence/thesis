@@ -4,8 +4,11 @@
 import { clientsClaim } from "workbox-core";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
+import { StaleWhileRevalidate, NetworkFirst } from "workbox-strategies";
+import { CacheableResponsePlugin } from "workbox-cacheable-response";
+import { BackgroundSyncPlugin } from "workbox-background-sync";
 import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate } from "workbox-strategies";
+import { NetworkOnly } from "workbox-strategies";
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -63,4 +66,33 @@ self.addEventListener("message", (event) => {
   }
 });
 
-// Any other custom service worker logic can go here.
+//Chache GET requests
+registerRoute(
+  ({ url, request }) =>
+    url.pathname.startsWith(process.env.REACT_APP_ENV === "production" ? "/api" : "/") &&
+    request.method === "GET",
+  new NetworkFirst({
+    cacheName: "json-cache",
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+);
+
+//Cache unsent post requests
+const bgSyncPlugin = new BackgroundSyncPlugin("myQueueName", {
+  maxRetentionTime: 24 * 60, // Retry for max of 24 Hours (specified in minutes)
+});
+
+registerRoute(
+  ({ url }) =>
+    url.pathname.endsWith("/create") ||
+    url.pathname.endsWith("/accept") ||
+    url.pathname.endsWith("/reject"),
+  new NetworkOnly({
+    plugins: [bgSyncPlugin],
+  }),
+  "POST"
+);

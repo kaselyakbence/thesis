@@ -1,6 +1,6 @@
-import { store } from "../../store";
+import { store } from "../../../store";
 
-import { makeAuthorizedRequest } from "../../../utils/api";
+import { makeAuthorizedRequest } from "../../../../utils/api";
 
 export const loadNotifications = async () => {
   const res = await makeAuthorizedRequest(`/profile/requests`, "GET");

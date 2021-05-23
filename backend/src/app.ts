@@ -1,5 +1,9 @@
 import express from "express";
 
+import morgan from "morgan";
+
+import helmet from "helmet";
+
 //Npm package that renders express thrown errors async
 import "express-async-errors";
 
@@ -19,6 +23,11 @@ import { errorHandler } from "./middlewares/error-handler";
 import cors from "cors";
 
 const app = express();
+
+//middlewares
+app.use(morgan("tiny"));
+
+app.use(helmet());
 
 //Parse body to json
 app.use(express.json());
