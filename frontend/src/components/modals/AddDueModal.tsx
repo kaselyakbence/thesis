@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     form: {
       width: "80vw",
-      height: "90vh",
+      height: "75vh",
     },
     nick_name: { marginTop: "10%" },
     button: { padding: "0" },

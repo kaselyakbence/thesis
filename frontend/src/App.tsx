@@ -8,9 +8,11 @@ import PublicRoute from "./components/auth/PublicRoute";
 
 import { Switch } from "react-router-dom";
 
-import { ThemeProvider, createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core";
 
 import { store, history } from "./redux/store";
+
+import { theme } from "./utils/theme";
 
 import "./style/app.css";
 
@@ -21,8 +23,6 @@ const Home = lazy(() => import("./pages/Home"));
 const Friends = lazy(() => import("./pages/Friends"));
 const Dues = lazy(() => import("./pages/Dues"));
 const Profile = lazy(() => import("./pages/Profile"));
-
-const theme = createMuiTheme();
 
 const App: FC = () => {
   return (

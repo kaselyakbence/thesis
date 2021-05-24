@@ -6,12 +6,10 @@ import { loadNotifications } from "./loadNotifications";
 
 export const rejectNotification = async (pubId: string) => {
   try {
-    const res = await makeAuthorizedRequest(`/events/${pubId}/reject`, "POST");
-    console.log("Res:", res);
+    await makeAuthorizedRequest(`/events/${pubId}/reject`, "POST");
 
     loadNotifications();
   } catch (_) {
     store.dispatch({ type: "REMOVE_NOTIFICATION", payload: pubId });
-    console.log("Remove notification:", pubId);
   }
 };

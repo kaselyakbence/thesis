@@ -42,7 +42,11 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "space-between",
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(1),
+    },
+    notifications: {
+      marginRight: "-8px",
+      marginTop: "5px",
     },
     menuHeader: {
       marginTop: "5%",
@@ -117,6 +121,7 @@ const Menu: FC = () => {
             edge="end"
             color="inherit"
             aria-label="menu"
+            className={classes.notifications}
             onClick={() => setEventsModalOpen(true)}
           >
             {notificationsSum > 0 ? (

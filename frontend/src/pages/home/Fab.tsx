@@ -17,16 +17,23 @@ import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      position: "absolute",
-      bottom: "1vh",
-      right: "1vw",
-      transform: "translateZ(0px)",
+      height: "100vh",
+      transform: "translateZ(50%)",
       flexGrow: 1,
     },
     speedDial: {
       position: "absolute",
-      bottom: theme.spacing(2),
+      bottom: theme.spacing(4),
       right: theme.spacing(2),
+    },
+    fab: {
+      width: theme.typography.fontSize * 3.5,
+      height: theme.typography.fontSize * 3.5,
+    },
+
+    openIcon: {
+      width: theme.typography.fontSize * 1.6,
+      height: theme.typography.fontSize * 1.6,
     },
   })
 );
@@ -49,19 +56,33 @@ export default function OpenIconSpeedDial(): JSX.Element {
         <SpeedDial
           ariaLabel="SpeedDial openIcon example"
           className={classes.speedDial}
-          icon={<SpeedDialIcon openIcon={<CloseIcon />} />}
+          classes={{ fab: classes.fab }}
+          icon={
+            <SpeedDialIcon
+              classes={{
+                icon: classes.openIcon,
+                iconOpen: classes.openIcon,
+                openIconOpen: classes.openIcon,
+                iconWithOpenIconOpen: classes.openIcon,
+                openIcon: classes.openIcon,
+              }}
+              openIcon={<CloseIcon /*fontSize="large"*/ />}
+            />
+          }
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
           open={open}
         >
           <SpeedDialAction
             key="Friends"
+            classes={{ fab: classes.fab }}
             icon={<ContactsIcon />}
             tooltipTitle="Friends"
             onClick={() => handleFabClick(setFriendModalOpen)}
           />
           <SpeedDialAction
             key="Dues"
+            classes={{ fab: classes.fab }}
             icon={<AttachMoneyIcon />}
             tooltipTitle="Dues"
             onClick={() => handleFabClick(setDueModalOpen)}
