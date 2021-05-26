@@ -16,10 +16,11 @@ const useStyles = makeStyles((theme: Theme) =>
     home: {
       width: "100vw",
       height: "100vh",
+      // backgroundColor: theme.palette.background.paper,
     },
     paper: {
       position: "absolute",
-      top: "15vh",
+      top: "55px",
       width: "100%",
       height: "fit-content",
     },

@@ -22,6 +22,7 @@ import VisitDueModal from "../components/modals/VisitDueModal";
 
 import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,12 +38,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     add_button: {
       position: "absolute",
-      bottom: theme.spacing(2),
+      bottom: theme.spacing(4),
       right: theme.spacing(2),
       backgroundColor: theme.palette.success.main,
+      width: theme.typography.fontSize * 3.5,
+      height: theme.typography.fontSize * 3.5,
     },
     add_icon: {
       color: theme.palette.common.white,
+      width: theme.typography.fontSize * 2,
+      height: theme.typography.fontSize * 2,
     },
     no_friends: {
       height: "100vh",
@@ -103,7 +108,9 @@ const Dues: FC = () => {
               </TableRow>
             ))}
           </Table>
-        ) : null}
+        ) : (
+          <Typography>You have no dues...</Typography>
+        )}
       </div>
       <IconButton className={classes.add_button} onClick={() => setDueModalOpen(true)}>
         <AddIcon className={classes.add_icon} />

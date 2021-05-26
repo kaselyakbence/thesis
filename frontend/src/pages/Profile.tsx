@@ -23,17 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
     },
     paper: {
-      height: "75vh",
+      height: "60vh",
       width: "80vw",
-    },
-    balance: {
-      marginTop: "25%",
-      width: "100%",
-      display: "flex",
-      justifyContent: "center",
-    },
-    balance_text: {
-      fontSize: "1.4rem",
     },
   })
 );
@@ -48,7 +39,7 @@ const Profile: FC = () => {
       <Menu />
       <div className={classes.page}>
         <Paper className={classes.paper}>
-          <Typography className={classes.padding}>{`Nick name: ${profile.nick_name}`}</Typography>
+          <Typography className={classes.padding}>{`Username: ${profile.nick_name}`}</Typography>
           <Typography className={classes.padding}>{`Email: ${profile.email}`}</Typography>
           <Typography className={classes.padding}>{`First name: ${
             profile.first_name ?? "unknown"
@@ -56,11 +47,6 @@ const Profile: FC = () => {
           <Typography className={classes.padding}>{`Last name: ${
             profile.last_name ?? "unknown"
           }`}</Typography>
-          <div className={classes.balance}>
-            <Typography
-              className={classes.balance_text}
-            >{`Your balance: ${profile.balance} Ft`}</Typography>
-          </div>
         </Paper>
       </div>
     </>

@@ -37,12 +37,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     add_button: {
       position: "absolute",
-      bottom: theme.spacing(2),
+      bottom: theme.spacing(4),
       right: theme.spacing(2),
       backgroundColor: theme.palette.success.main,
+      width: theme.typography.fontSize * 3.5,
+      height: theme.typography.fontSize * 3.5,
     },
     add_icon: {
       color: theme.palette.common.white,
+      width: theme.typography.fontSize * 2,
+      height: theme.typography.fontSize * 2,
     },
     no_friends: {
       height: "100vh",

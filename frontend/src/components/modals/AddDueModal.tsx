@@ -164,7 +164,7 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
 
             <div className={classes.name}>
               <TextField
-                label="Name"
+                label="Title"
                 name="name"
                 value={formik.values.name}
                 onChange={formik.handleChange}
@@ -210,7 +210,7 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
               error={subFormik.touched.name && Boolean(subFormik.errors.name)}
             />
             <TextField
-              label="Value"
+              label="Price"
               name="value"
               type="number"
               value={subFormik.values.value}

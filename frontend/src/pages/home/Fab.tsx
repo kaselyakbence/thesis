@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     openIcon: {
-      width: theme.typography.fontSize * 1.6,
-      height: theme.typography.fontSize * 1.6,
+      width: theme.typography.fontSize * 1.5,
+      height: theme.typography.fontSize * 1.5,
     },
   })
 );
