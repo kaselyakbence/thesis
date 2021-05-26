@@ -2,15 +2,19 @@ import { FC } from "react";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { loadUser } from "../redux/actions/profile/loadUser";
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
-import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import Checkbox from "@material-ui/core/Checkbox";
+import Typography from "@material-ui/core/Typography";
 
 import Menu from "../components/display/Menu";
 
 import { User } from "../redux/reducers/profileReducers/userReducer";
+
+import { makeAuthorizedRequest } from "../utils/api";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +38,13 @@ const Profile: FC = () => {
 
   const profile = useSelector<RootState>((state) => state.profile.user) as User;
 
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    await makeAuthorizedRequest("/profile/public/change", "PUT", {
+      is_public: event.target.checked,
+    });
+    loadUser();
+  };
+
   return (
     <>
       <Menu />
@@ -47,6 +58,12 @@ const Profile: FC = () => {
           <Typography className={classes.padding}>{`Last name: ${
             profile.last_name ?? "unknown"
           }`}</Typography>
+          <Checkbox
+            checked={profile.is_public ?? true}
+            onChange={handleChange}
+            name="public"
+            color="primary"
+          />
         </Paper>
       </div>
     </>

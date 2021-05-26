@@ -6,6 +6,7 @@ export interface User {
   first_name?: Maybe<string>;
   last_name?: Maybe<string>;
   balance?: Maybe<number>;
+  is_public?: Maybe<boolean>;
 }
 
 export const initialState: Maybe<User> = {};

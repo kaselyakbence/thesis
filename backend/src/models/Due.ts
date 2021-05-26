@@ -144,6 +144,7 @@ dueSchema.methods.activate = async function () {
       },
     }
   ).exec();
+  this.save();
 };
 
 const Due = mongoose.model<DueDoc, DueModel>("due", dueSchema);
