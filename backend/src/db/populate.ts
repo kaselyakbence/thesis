@@ -57,16 +57,35 @@ export const populate = async () => {
     owner: user.nick_name,
     receiver: user2.nick_name,
     desc: "Test description",
-    items: [{ name: "Name", value: 2 }],
+    items: [{ name: "Name", value: 1000 }],
   });
 
   await due.save();
 
   await due.activate();
 
+  const user3 = User.build({
+    email: "test3@test.com",
+    nick_name: "user3",
+    password: "password",
+  });
+  await user3.save();
+
+  const due2 = Due.build({
+    name: "Test due",
+    owner: user.nick_name,
+    receiver: user3.nick_name,
+    desc: "Test description",
+    items: [{ name: "Name", value: 2000 }],
+  });
+
+  await due2.save();
+
+  await due2.activate();
+
   registerFriends(40, user);
 
-  //user.addFriend(user2.id);
+  user.addFriend(user2.id);
 
   // const event = Event.buildFriendRequest(user2.id, user.id);
   // await event.save();

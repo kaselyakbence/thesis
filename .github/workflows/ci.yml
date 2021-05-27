@@ -40,6 +40,10 @@ jobs:
         working-directory: frontend
         run: |
           npm ci
-          touch .env
+          touch .env   
+          echo NODE_ENV=production >> .env  
+          echo PUBLIC_URL=https://thesis.kaselyakbence.me/ >> .env  
+          echo REACT_APP_ENV=production >> .env  
           echo REACT_APP_API_URL=https://thesis.kaselyakbence.me/api >> .env
           echo GENERATE_SOURCEMAP=false >> .env  
+       

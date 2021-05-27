@@ -62,7 +62,7 @@ const loginValidationSchema = yup.object({
   nick_name: yup.string().required("Username is required"),
   password: yup
     .string()
-    .min(4, "Password should be of minimum 4 characters length")
+    .min(4, "Password should be minimum 4 characters")
     .required("Password is required"),
 });
 

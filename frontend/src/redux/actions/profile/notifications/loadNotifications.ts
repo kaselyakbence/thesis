@@ -1,6 +1,6 @@
-import { store } from "../../store";
+import { store } from "../../../store";
 
-import { makeAuthorizedRequest } from "../../../utils/api";
+import { makeAuthorizedRequest } from "../../../../utils/api";
 
 export const loadNotifications = async () => {
   const res = await makeAuthorizedRequest(`/profile/requests`, "GET");
@@ -9,5 +9,6 @@ export const loadNotifications = async () => {
     const notifications = await res.json();
 
     store.dispatch({ type: "LOAD_NOTIFICATIONS", payload: notifications });
+    store.dispatch({ type: "RESET_REMOWED" });
   }
 };

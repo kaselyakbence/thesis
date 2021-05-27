@@ -17,7 +17,7 @@ router.get("/details", authorize, async (req: Request, res: Response) => {
   if (!req.currentUser?.id) throw new UnauthorizedError();
 
   const user = await User.findById(req.currentUser.id)
-    .select("nick_name email first_name last_name")
+    .select("nick_name email first_name last_name is_public")
     .exec();
 
   if (!user) throw new NotFoundError();

@@ -25,7 +25,6 @@ interface UserAttrs {
   first_name?: string;
   last_name?: string;
   password: string;
-  is_public?: boolean;
 }
 
 //Interface for UserModel
@@ -37,6 +36,8 @@ interface UserModel extends mongoose.Model<any> {
     events: UserEvent[];
   }>;
   getDues(): UserDue[];
+  getDues(): UserDue[];
+  setPublic(is_public: boolean): void;
 }
 
 //Interface for the properties of User Document
@@ -75,9 +76,11 @@ export interface UserDoc extends mongoose.Document {
         email: string;
         first_name?: string;
         last_name?: string;
+        is_public: boolean;
       }
-    | { nick_name: string; isPublic: boolean }
+    | { nick_name: string; is_public: boolean }
   >;
+  setPublic(is_public: boolean): void;
 }
 
 //Creating the User schema
@@ -155,7 +158,6 @@ const userSchema = new mongoose.Schema(
     ],
     is_public: {
       type: Boolean,
-      default: true,
       require: true,
     },
   },
@@ -195,7 +197,7 @@ userSchema.pre("save", async function (done) {
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
-  return new User(attrs);
+  return new User({ ...attrs, is_public: true });
 };
 
 userSchema.methods.visit = async function () {
@@ -208,7 +210,6 @@ userSchema.methods.visit = async function () {
     return {
       nick_name: this.get("nick_name"),
       is_public: false,
-      isPublic: false,
     };
   }
 };
@@ -233,6 +234,11 @@ userSchema.methods.getRequests = async function () {
 
 userSchema.methods.getDues = async function () {
   return User.findById(this.id, "dues").exec();
+};
+
+userSchema.methods.setPublic = async function (is_public: boolean) {
+  this.set("is_public", is_public);
+  await this.save();
 };
 
 const User = mongoose.model<UserDoc, UserModel>("user", userSchema);

@@ -59,16 +59,16 @@ const useStyles = makeStyles((theme) => ({
 
 const registerValidationSchema = yup.object({
   nick_name: yup.string().required("Username is required"),
-  email: yup.string().email("The email must be valid").required("Email is required"),
+  email: yup.string().email("Email must be valid").required("Email is required"),
   first_name: yup.string().matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed"),
   ast_name: yup.string().matches(/^[aA-zZ\s]+$/, "Only alphabets characters are allowed"),
   password: yup
     .string()
-    .min(4, "Password should be of minimum 4 characters length")
+    .min(4, "Password must be minimum 4 characters")
     .required("Password is required"),
   password2: yup
     .string()
-    .min(4, "Password should be of minimum 4 characters length")
+    .min(4, "Password must be minimum 4 characters")
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Password is required"),
 });
@@ -87,9 +87,8 @@ const Register: FC = () => {
       password2: "",
     },
     validationSchema: registerValidationSchema,
-    onSubmit: async (values, { setErrors }) => {
-      const error = await register(values);
-      setErrors(error);
+    onSubmit: async (values) => {
+      await register(values);
     },
   });
 
