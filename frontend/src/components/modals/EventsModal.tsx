@@ -16,6 +16,7 @@ import CustomModal from "../utils/CustomModal";
 import { RootState } from "../../redux/store";
 
 import { Notification, EventType } from "../../redux/reducers/profileReducers/notificationsReducer";
+import { RemowedNotification } from "../../redux/reducers/profileReducers/removedNotification";
 
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -67,6 +68,14 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
     (state) => state.profile.notifications
   ) as Notification[];
 
+  const remowed = useSelector<RootState>(
+    (state) => state.profile.remowedNotifications
+  ) as RemowedNotification[];
+
+  const filteredNotifications = notifications.filter(
+    (notification) => !remowed.some((remowedNot) => notification.pubId === remowedNot.pubId)
+  );
+
   const handleAccept = async (pubId: string, event?: EventType) => {
     acceptNotification(pubId, event);
   };
@@ -90,14 +99,14 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
       <CustomModal onClose={onClose}>
         <List className={classes.list}>
           <>
-            {notifications.length === 0 ? (
+            {filteredNotifications.length === 0 ? (
               <ListItem>
                 <ListItemText className={classes.no_events}>No notifications found...</ListItemText>
               </ListItem>
             ) : null}
             {/* Display friend requests */}
-            {notifications.some((notification) => notification.type === "FRIEND_REQUEST")
-              ? notifications.map((notification) =>
+            {filteredNotifications.some((notification) => notification.type === "FRIEND_REQUEST")
+              ? filteredNotifications.map((notification) =>
                   notification.type === "FRIEND_REQUEST" ? (
                     <ListItem key={notification.pubId}>
                       <ListItemText
@@ -120,8 +129,8 @@ const EventModal: FC<EventsModalProps> = ({ onClose }) => {
                   ) : null
                 )
               : null}
-            {notifications.some((notification) => notification.type === "LENT_REQUEST")
-              ? notifications.map((notification) =>
+            {filteredNotifications.some((notification) => notification.type === "LENT_REQUEST")
+              ? filteredNotifications.map((notification) =>
                   notification.type === "LENT_REQUEST" ? (
                     <ListItem key={notification.pubId}>
                       <ListItemText

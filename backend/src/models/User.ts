@@ -76,8 +76,9 @@ export interface UserDoc extends mongoose.Document {
         email: string;
         first_name?: string;
         last_name?: string;
+        is_public: boolean;
       }
-    | { nick_name: string; isPublic: boolean }
+    | { nick_name: string; is_public: boolean }
   >;
   setPublic(is_public: boolean): void;
 }
@@ -209,7 +210,6 @@ userSchema.methods.visit = async function () {
     return {
       nick_name: this.get("nick_name"),
       is_public: false,
-      isPublic: false,
     };
   }
 };

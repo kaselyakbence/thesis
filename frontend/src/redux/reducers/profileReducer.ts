@@ -8,6 +8,13 @@ import {
 } from "./profileReducers/notificationsReducer";
 
 import {
+  RemowedNotification,
+  initialState as remowedNotificationsInitialState,
+  Action as RemowedNotificationAction,
+  remowedNotificationsReducer,
+} from "./profileReducers/removedNotification";
+
+import {
   Friend,
   initialState as friendsInitialState,
   Action as FriendAction,
@@ -33,15 +40,22 @@ export interface Profile {
   notifications: Notification[];
   friends: Friend[];
   userDues: UserDue[];
+  remowedNotifications: RemowedNotification[];
 }
 
-export type Action = NotificationAction | FriendAction | UserDueAction | UserAction;
+export type Action =
+  | NotificationAction
+  | FriendAction
+  | UserDueAction
+  | UserAction
+  | RemowedNotificationAction;
 
 const initialState: Profile = {
   user: userInitialState,
   notifications: messageInitialState,
   friends: friendsInitialState,
   userDues: userDueInitialState,
+  remowedNotifications: remowedNotificationsInitialState,
 };
 
 export const profileReducer = (state: Profile = initialState, action: Action): Profile => {
@@ -53,9 +67,22 @@ export const profileReducer = (state: Profile = initialState, action: Action): P
     case "LOAD_DUES":
       return { ...state, userDues: duesReducer(state.userDues, action) };
     case "LOAD_USER":
-      return { ...state, user: userReducer(state.user, action) };
+      return {
+        ...state,
+        user: userReducer(state.user, action),
+      };
     case "SET_BALANCE":
       return { ...state, user: userReducer(state.user, action) };
+    case "RESET_REMOWED":
+      return {
+        ...state,
+        remowedNotifications: remowedNotificationsReducer(state.remowedNotifications, action),
+      };
+    case "REMOVE_NOTIFICATION":
+      return {
+        ...state,
+        remowedNotifications: remowedNotificationsReducer(state.remowedNotifications, action),
+      };
     default:
       return state;
   }

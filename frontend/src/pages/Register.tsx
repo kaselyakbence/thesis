@@ -87,9 +87,8 @@ const Register: FC = () => {
       password2: "",
     },
     validationSchema: registerValidationSchema,
-    onSubmit: async (values, { setErrors }) => {
-      const error = await register(values);
-      setErrors(error);
+    onSubmit: async (values) => {
+      await register(values);
     },
   });
 

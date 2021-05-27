@@ -48,7 +48,7 @@ const AddFriendsModal: FC<AddFriendsModalProps> = ({ onClose }) => {
   const [options, setOptions] = useState<{ nick_name: string }[]>([]);
 
   useEffect(() => {
-    makeAuthorizedRequest("/users/search", "POST", { query }).then((res) =>
+    makeAuthorizedRequest("/users/search", "POST", { query, no_friends: true }).then((res) =>
       res.json().then((json) => setOptions(json))
     );
   }, [query]);

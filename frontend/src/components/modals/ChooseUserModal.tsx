@@ -56,7 +56,7 @@ const ChooseUserModal: FC<ChooseUserModalProps> = ({ onClose, chooseUser }) => {
   const [friendsOptions, setFriendsOptions] = useState<Friend[]>([]);
 
   useEffect(() => {
-    makeAuthorizedRequest("/users/search", "POST", { query }).then((res) =>
+    makeAuthorizedRequest("/users/search", "POST", { query, no_friends: true }).then((res) =>
       res.json().then((json) => setOptions(json))
     );
     setFriendsOptions(friends.filter((friend) => friend.nick_name.includes(query)));

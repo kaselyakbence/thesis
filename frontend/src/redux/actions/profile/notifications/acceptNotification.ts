@@ -21,5 +21,12 @@ export const acceptNotification = async (pubId: string, event?: EventType) => {
     }
   } catch (_) {
     store.dispatch({ type: "REMOVE_NOTIFICATION", payload: pubId });
+    store.dispatch({
+      type: "ADD_MESSAGE",
+      payload: {
+        severity: "warning",
+        desciption: "You are offline. Notification will be accepted next time you go online",
+      },
+    });
   }
 };

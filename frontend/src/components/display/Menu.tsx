@@ -28,6 +28,9 @@ import EventsModal from "../modals/EventsModal";
 import MessageSnackBar from "./MessageSnackbar";
 
 import { User } from "../../redux/reducers/profileReducers/userReducer";
+import { Notification } from "../../redux/reducers/profileReducers/notificationsReducer";
+import { RemowedNotification } from "../../redux/reducers/profileReducers/removedNotification";
+
 import { logout } from "../../redux/actions/jwt/logoutAction";
 import { loadNotifications } from "../../redux/actions/profile/notifications/loadNotifications";
 import { loadFriends } from "../../redux/actions/profile/loadFriends";
@@ -75,9 +78,18 @@ const Menu: FC = () => {
 
   const [open, setOpen] = useState(false);
 
-  const notificationsSum = useSelector<RootState>(
-    (state) => state.profile.notifications.length
-  ) as number;
+  const notifications = useSelector<RootState>(
+    (state) => state.profile.notifications
+  ) as Notification[];
+
+  const remowed = useSelector<RootState>(
+    (state) => state.profile.remowedNotifications
+  ) as RemowedNotification[];
+
+  const filteredNotifications = notifications.filter(
+    (notification) => !remowed.some((remowedNot) => notification.pubId === remowedNot.pubId)
+  );
+
   const friensSum = useSelector<RootState>((state) => state.profile.friends.length) as number;
   const duesNum = useSelector<RootState>((state) => state.profile.userDues.length) as number;
 
@@ -124,8 +136,8 @@ const Menu: FC = () => {
             className={classes.notifications}
             onClick={() => setEventsModalOpen(true)}
           >
-            {notificationsSum > 0 ? (
-              <Badge badgeContent={notificationsSum} color="error">
+            {filteredNotifications.length > 0 ? (
+              <Badge badgeContent={filteredNotifications.length} color="error">
                 <NotificationsIcon />
               </Badge>
             ) : (

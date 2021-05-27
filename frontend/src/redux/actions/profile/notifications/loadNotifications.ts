@@ -9,5 +9,6 @@ export const loadNotifications = async () => {
     const notifications = await res.json();
 
     store.dispatch({ type: "LOAD_NOTIFICATIONS", payload: notifications });
+    store.dispatch({ type: "RESET_REMOWED" });
   }
 };

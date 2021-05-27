@@ -10,13 +10,6 @@ export interface RegisterData {
   password2: string;
 }
 
-type Error = {
-  nick_name?: string;
-  email?: string;
-  password?: string;
-  password2?: string;
-};
-
 export const register = async ({
   nick_name,
   email,
@@ -24,14 +17,7 @@ export const register = async ({
   last_name,
   password,
   password2,
-}: RegisterData): Promise<Error> => {
-  if (password !== password2) {
-    return {
-      password: "Passwords aren't matching",
-      password2: "Passwords aren't matching",
-    };
-  }
-
+}: RegisterData): Promise<void> => {
   const body = {
     nick_name,
     email,
@@ -55,10 +41,8 @@ export const register = async ({
   const resBody = await res.json();
 
   if (res.status === 422) {
-    return resBody.map(({ field, message }: { field: string; message: string }) => {
-      const error: any = {};
-      error[field] = message;
-      return error;
+    resBody.errors.forEach(({ message }: { message: string }) => {
+      store.dispatch({ type: "ADD_MESSAGE", payload: { severity: "error", desciption: message } });
     });
   }
 
@@ -72,6 +56,4 @@ export const register = async ({
       },
     });
   }
-
-  return {};
 };
