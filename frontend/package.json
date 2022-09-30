@@ -29,7 +29,7 @@
     "redux-thunk": "^2.3.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.0.3",
-    "victory": "^35.8.1",
+    "victory": "^36.6.8",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.3",
     "workbox-broadcast-update": "^5.1.3",
